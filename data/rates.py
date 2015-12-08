@@ -1,5 +1,5 @@
 """ This module is primarily responsible for retriving historical rates from
-a data source, parse them and save them to file.
+    a data source, parse them and save them to file.
 """
 
 import csv
@@ -7,7 +7,7 @@ import http.client
 import json
 import data.common
 import datetime
-
+import os
 
 def get_daily_candles(instrument, start_date, end_date):
     """ Obtain a list of daily bid-ask candles for the given instrument.
@@ -91,9 +91,11 @@ def import_daily_candles():
         Returns:
             void.
     """
+    project_dir = os.environ['PYTHONPATH']
     for instrument in data.common.ALL_PAIRS:
         # Set up the output files.
-        out_file_path = "store/candles/daily/{0}.csv".format(instrument)
+        out_file_path = "{0}/data/store/candles/daily/{1}.csv". \
+                         format(project_dir, instrument)
         start_date = "2006-01-01"
         end_date = str(datetime.date.today() - datetime.timedelta(1))
 

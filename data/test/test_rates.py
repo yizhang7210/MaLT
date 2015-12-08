@@ -7,23 +7,19 @@ import csv
 from data import rates
 
 class TestDailyCandles(unittest.TestCase):
-    """ Class for testing daily candles
-    """
+    """ Class for testing daily candles. """
 
     def setUp(self):
-        """ Set up temporary files
-        """
+        """ Set up temporary files."""
         self.tmp_file = "tmp.csv"
 
     def tearDown(self):
-        """ Delete temporary files
-        """
+        """ Delete temporary files."""
         if os.path.isfile(self.tmp_file):
             os.remove(self.tmp_file)
 
     def test_get_candles(self):
-        """ Test obtaining daily candles correctly
-        """
+        """ Test obtaining daily candles correctly."""
         candles = rates.get_daily_candles("EUR_USD", "2015-11-07", "2015-11-11")
         self.assertEqual(len(candles), 3)
         self.assertEqual(candles[0]['lowBid'], 1.07186)
@@ -31,8 +27,7 @@ class TestDailyCandles(unittest.TestCase):
         self.assertEqual(candles[2]['volume'], 26025)
 
     def test_write_candles(self):
-        """ Test writing candles to file
-        """
+        """ Test writing candles to file."""
         # Get the candles.
         candles = rates.get_daily_candles("USD_JPY", "2013-11-08", "2013-11-20")
 

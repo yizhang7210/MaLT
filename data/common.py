@@ -1,5 +1,5 @@
 """ This module provides common resources shared among modules
-in the Data component.
+    in the Data component.
 """
 
 # REST end-points.
