@@ -2,6 +2,8 @@
     in the Data component.
 """
 
+import os
+
 # REST end-points.
 GAME_URL = "api-fxpractice.oanda.com"
 TRADE_URL = "api-fxtrade.oanda.com"
@@ -12,3 +14,9 @@ TRADE_TOKEN = ""
 
 # Currency pairs.
 ALL_PAIRS = ['EUR_USD', 'USD_JPY', 'GBP_USD', 'USD_CHF', 'USD_CAD']
+
+# Project Directory.
+PROJECT_DIR = os.environ['PYTHONPATH']
+
+# Start day of historical data.
+START_DATE = '2005-01-01'

@@ -3,9 +3,7 @@
 """
 
 import csv
-import os
-from data import common
-
+import common
 
 def price_to_pip(price, pip_multiplier):
     """ Numbers are format to 1 decimal places in pips."""
@@ -91,10 +89,9 @@ def transform(input_file, output_file, pip_multiplier):
 def main():
     """ Main in transforming data for ar_daily strategy."""
 
-    project_dir = os.environ['PYTHONPATH']
     for instrument in common.ALL_PAIRS:
         in_file = "{0}/data/store/candles/daily/{1}.csv". \
-                   format(project_dir, instrument)
+                   format(common.PROJECT_DIR, instrument)
         out_file = "store/{0}.csv".format(instrument)
 
         if 'JPY' in instrument:

@@ -5,7 +5,7 @@
 import csv
 import http.client
 import json
-import data.common
+import common
 import datetime
 import os
 
@@ -35,12 +35,12 @@ def get_daily_candles(instrument, start_date, end_date):
                       "candleFormat=bidask&granularity=D&dailyAlignment=17&"
                       "alignmentTimezone=America%2FNew_York"). \
                      format(instrument, start_date, end_date)
-    header_string = "Bearer {0}".format(data.common.GAME_TOKEN)
+    header_string = "Bearer {0}".format(common.GAME_TOKEN)
 
     # Open connection. Send request. Get response.
     # TODO: Distinguish between game and trade.
     # TODO: Deal with connection errors/non-ideal responses.
-    conn = http.client.HTTPSConnection(data.common.GAME_URL)
+    conn = http.client.HTTPSConnection(common.GAME_URL)
     conn.request("GET", request_string, "", {"Authorization" : header_string})
     response = conn.getresponse()
     response_content = response.read().decode()
@@ -83,7 +83,8 @@ def write_candles_to_csv(candles, out_file):
 
 
 def import_daily_candles():
-    """ Fetch daily candles from 2006-01-01 to date for all currency pairs.
+    """ Fetch daily candles from common.START_DATE to date
+        for all currency pairs.
 
         Args:
             void.
@@ -92,11 +93,11 @@ def import_daily_candles():
             void.
     """
     project_dir = os.environ['PYTHONPATH']
-    for instrument in data.common.ALL_PAIRS:
+    for instrument in common.ALL_PAIRS:
         # Set up the output files.
         out_file_path = "{0}/data/store/candles/daily/{1}.csv". \
                          format(project_dir, instrument)
-        start_date = "2006-01-01"
+        start_date = common.START_DATE
         end_date = str(datetime.date.today() - datetime.timedelta(1))
 
         # Get the candles and write to file.
@@ -105,7 +106,8 @@ def import_daily_candles():
 
 def main():
     """ Main in Data component.
-        1. Fetch daily candles from 2006-01-01 to date for all currency pairs.
+        1. Fetch daily candles from common.START_DATE to date
+        for all currency pairs.
     """
     import_daily_candles()
 

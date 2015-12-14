@@ -1,5 +1,4 @@
-""" This is the test module for the ar_daily strategy module.
-"""
+""" This is the test module for the ar_daily strategy module."""
 
 import unittest
 import os
@@ -27,21 +26,21 @@ class TestTransformer(unittest.TestCase):
 
         # Read the file and check the numbers.
         results = []
-        with open(self.tmp_file, 'r') as csvhandle:
-            reader = csv.reader(csvhandle, delimiter=' ')
+        with open(self.tmp_file, 'r') as csv_handle:
+            reader = csv.reader(csv_handle, delimiter=' ')
             for row in reader:
                 results.append(row)
 
         self.assertTrue(len(results) > 3100)
         self.assertEqual(len(results[0]), 8)
-        self.assertEqual(results[0][0], '20.0')
-        self.assertEqual(results[10][1], '-35.0')
-        self.assertEqual(results[28][2], '112.0')
+        self.assertEqual(results[0][0], '19.0')
+        self.assertEqual(results[10][1], '-18.0')
+        self.assertEqual(results[28][2], '20.0')
         self.assertEqual(results[236][3], '10.0')
-        self.assertEqual(results[387][4], '43.0')
-        self.assertEqual(results[1822][5], '-86.5')
-        self.assertEqual(results[2618][6], '56.3')
-        self.assertEqual(results[3131][7], '42.6')
+        self.assertEqual(results[387][4], '95.0')
+        self.assertEqual(results[1822][5], '-40.0')
+        self.assertEqual(results[2618][6], '25.5')
+        self.assertEqual(results[3131][7], '-15.2')
 
 # Main.
 if __name__ == "__main__":

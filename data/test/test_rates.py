@@ -1,5 +1,4 @@
-""" This is the test module for the data component.
-"""
+""" This is the test module for the data component."""
 
 import unittest
 import os
@@ -36,8 +35,8 @@ class TestDailyCandles(unittest.TestCase):
 
         # Read the file and check the results.
         results = []
-        with open(self.tmp_file, 'r') as csvhandle:
-            reader = csv.reader(csvhandle, delimiter=' ')
+        with open(self.tmp_file, 'r') as csv_handle:
+            reader = csv.reader(csv_handle, delimiter=' ')
             for row in reader:
                 results.append(row)
 
