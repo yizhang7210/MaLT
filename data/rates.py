@@ -7,7 +7,6 @@ import http.client
 import json
 import common
 import datetime
-import os
 
 def get_daily_candles(instrument, start_date, end_date):
     """ Obtain a list of daily bid-ask candles for the given instrument.
@@ -62,25 +61,28 @@ def write_candles_to_csv(candles, out_file):
         Returns:
             void.
     """
-    # TODO: Check candles are valid, non-empty and have the right fields.
-
     # Set up the field names.
     date_len = len("2000-01-01")
     field_names = ['time', 'openBid', 'highBid', 'lowBid', 'closeBid',
                    'openAsk', 'highAsk', 'lowAsk', 'closeAsk', 'volume']
 
-    def get_short_field(field):
-        """ Have a local function fetching the fields and shorten it."""
-        return str(candle.get(field))[:date_len]
-
     # Write each candle line by line.
     with open(out_file, 'w') as csv_handle:
+        # Write the headers first.
         writer = csv.writer(csv_handle, delimiter=' ')
         writer.writerow(field_names)
+
+        # Initialize candle.
         candle = None
         for candle in candles:
-            writer.writerow([get_short_field(field) for field in field_names])
+            # Need to eliminate weekend candles.
+            date = candle.get('time')[:date_len]
+            date_obj = datetime.datetime.strptime(date, '%Y-%m-%d')
 
+            # The date needs to be Sunday - Thursday.
+            if date_obj.weekday() in [6, 0, 1, 2, 3]:
+                row = [date] + [candle.get(field) for field in field_names[1:]]
+                writer.writerow(row)
 
 def import_daily_candles():
     """ Fetch daily candles from common.START_DATE to date
@@ -92,11 +94,10 @@ def import_daily_candles():
         Returns:
             void.
     """
-    project_dir = os.environ['PYTHONPATH']
     for instrument in common.ALL_PAIRS:
         # Set up the output files.
         out_file_path = "{0}/data/store/candles/daily/{1}.csv". \
-                         format(project_dir, instrument)
+                         format(common.PROJECT_DIR, instrument)
         start_date = common.START_DATE
         end_date = str(datetime.date.today() - datetime.timedelta(1))
 

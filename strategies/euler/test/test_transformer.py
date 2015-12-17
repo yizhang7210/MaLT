@@ -1,9 +1,10 @@
-""" This is the test module for the ar_daily strategy module."""
+""" This is the test module for strategy Euler."""
 
 import unittest
 import os
 import csv
-from strategies.ar_daily import transformer
+import common
+from strategies.euler import transformer
 
 class TestTransformer(unittest.TestCase):
     """ Class for testing transformer."""
@@ -20,8 +21,8 @@ class TestTransformer(unittest.TestCase):
     def test_transformation(self):
         """ Test the data gets transformed and written properly."""
         # Pick the path and transform the data.
-        project_dir = os.environ['PYTHONPATH']
-        in_file = "{0}/data/store/candles/daily/USD_CHF.csv".format(project_dir)
+        in_file = "{0}/data/store/candles/daily/USD_CHF.csv". \
+                    format(common.PROJECT_DIR)
         transformer.transform(in_file, self.tmp_file, 10000)
 
         # Read the file and check the numbers.
@@ -31,16 +32,16 @@ class TestTransformer(unittest.TestCase):
             for row in reader:
                 results.append(row)
 
-        self.assertTrue(len(results) > 3100)
+        self.assertTrue(len(results) > 2800)
         self.assertEqual(len(results[0]), 8)
-        self.assertEqual(results[0][0], '19.0')
-        self.assertEqual(results[10][1], '-18.0')
-        self.assertEqual(results[28][2], '20.0')
-        self.assertEqual(results[236][3], '10.0')
-        self.assertEqual(results[387][4], '95.0')
-        self.assertEqual(results[1822][5], '-40.0')
-        self.assertEqual(results[2618][6], '25.5')
-        self.assertEqual(results[3131][7], '-15.2')
+        self.assertEqual(results[0][0], '155.0')
+        self.assertEqual(results[10][1], '-28.0')
+        self.assertEqual(results[28][2], '-83.0')
+        self.assertEqual(results[236][3], '3.0')
+        self.assertEqual(results[387][4], '59.0')
+        self.assertEqual(results[1822][5], '-27.8')
+        self.assertEqual(results[2618][6], '255.6')
+        self.assertEqual(results[2811][7], '49.0')
 
 # Main.
 if __name__ == "__main__":

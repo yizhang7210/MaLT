@@ -1,5 +1,5 @@
 """ This package is responsible for transforming raw data to
-    the appropriate format for this strategy ar_daily.
+    the appropriate format for this strategy: Euler.
 """
 
 import csv
