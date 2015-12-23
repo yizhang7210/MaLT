@@ -1,103 +1,114 @@
-""" This package is responsible for transforming raw data to
-    the appropriate format for this strategy: Euler.
+""" This module is responsible for transforming raw data to
+    the appropriate format for strategy Euler.
 """
 
 import csv
 import common
-
-def price_to_pip(price, pip_multiplier):
-    """ Numbers are format to 1 decimal places in pips."""
-    pip = price * pip_multiplier
-    return "{0:.1f}".format(pip)
+from strategies import util
+from strategies.euler import euler
 
 
-def list_to_float(lst):
-    """ Change the entire list to float."""
-    # TODO: how do we deal with exceptions?
-    return [float(x) for x in lst]
-
+#====================================================================
+#   Functions:
+#====================================================================
 
 def build_features(row, pip_multiplier):
     """ Return the row without the date, openBid and volume.
         Then take away the openBid price.
+
+        Args:
+            row: List of Strings. A row from data file in ./store/
+            pip_multiplier: int. The multiplier for calculating pip from price.
+
+        Returns:
+            features: List of Floats. The quantities are: highBid, lowBid,
+                closeBid, openAsk, highAsk, lowAsk and closeAsk.
+                All relative to openBid, and in pips.
     """
-    row = list_to_float(row[1:-1])
-    features = [x - row[0] for x in row[1:]]
-    features = [price_to_pip(x, pip_multiplier) for x in features]
+    row = util.list_to_float(row[1:-1])
+    row = [x - row[0] for x in row[1:]]
+    features = [util.price_to_pip(x, pip_multiplier) for x in row]
     return features
 
 
-def build_target(row, pip_multiplier):
-    """ If closeBid - openAsk > 0. Can buy.
-        If closeAsk - openBid < 0. Can sell.
-        Otherwise do nothing.
-    """
-    # TODO: use dictionary instead of indices.
-    row = list_to_float(row[1:-1])
-    if row[3] - row[4] > 0:
-        diff = row[3] - row[4]
-    elif row[7] - row[0] < 0:
-        diff = row[7] - row[0]
-    else:
-        diff = 0
+def read_raw_file(input_file):
+    """ Read the raw input file to a nice format.
 
-    return [price_to_pip(diff, pip_multiplier)]
+        Args:
+            input_file: String. Location of the input raw data file.
+
+        Returns:
+            data: List of list of Strings. Each entry is a daily candle.
+                Within a daily candle, it's date, OHLC of bidAsk and volume.
+    """
+    with open(input_file, 'r') as input_handle:
+        # First line is header and last line is empty.
+        data = input_handle.read().split('\n')[1:-1]
+
+    data = [x.split(' ') for x in data]
+
+    return data
+
+
+def transform_row(row, next_row, pip_multiplier):
+    """ Return the transformed row with features and target variable.
+
+        Args:
+            row: List of Strings. A row from the raw data file representing
+                today's candle.
+            next_row: List of Strings. The row representing tomorrow's candle.
+            pip_multiplier: int. The multiplier for calculating pip from price.
+
+        Returns:
+            row: List of Floats. Combine the features and the target.
+    """
+    features = build_features(row, pip_multiplier)
+    target = euler.get_price_change(next_row, pip_multiplier)
+
+    return features + [target]
 
 
 def transform(input_file, output_file, pip_multiplier):
     """ Normalize daily candles.
         Features are:
             highBid, lowBid, closeBid, openAsk, highAsk,lowAsk,
-            and closeAsk (all relative to openBid) IN PIPS.
+            and closeAsk (all relative to openBid) in pips.
         Target variable is:
-            potential daily benefical price change IN PIPS.
+            potential daily benefical price change in pips.
             If prices rise enough, we have: closeBid - openAsk (> 0), buy.
             If prices fall enough, we have: closeAsk - openBid (< 0), sell.
             if prices stay relatively still, we don't buy or sell. It's 0.
 
         Args:
-            input_file: String. Name of the raw daily candle file.
-                e.g. MaLT/data/store/candles/daily/EUR_USD.csv
-            output_file: String. Name of the normalized file.
-                e.g. MaLT/strategies/ar_daily/store/EUR_USD.csv
+            input_file: String. Name of the raw daily candle file, should
+                be under common.DAILY_CANDLES.
+            output_file: String. Name of the normalized file, should be under
+                ./store.
             pip_multiplier: Int. Factor for converting price to pips.
-                e.g. 100 for USD_JPY and 10000 for all others.
+
         Returns:
             void.
     """
+    # Read the raw data and format.
+    raw_data = read_raw_file(input_file)
 
-    with open(input_file, 'r') as input_handle:
-        reader = csv.reader(input_handle, delimiter=' ')
-        # Skip header line.
-        next(reader)
-        with open(output_file, 'w') as output_handle:
-            writer = csv.writer(output_handle, delimiter=' ')
+    # Go through each line, build the features and targe variable.
+    with open(output_file, 'w') as output_handle:
+        writer = csv.writer(output_handle, delimiter=' ')
 
-            # Initialize iterator.
-            thisrow = next(reader)
-            nextrow = next(reader)
-            while True:
-                try:
-                    features = build_features(thisrow, pip_multiplier)
-                    target = build_target(nextrow, pip_multiplier)
-                    writer.writerow(features + target)
-                    thisrow = nextrow
-                    nextrow = next(reader)
-                except StopIteration:
-                    break
+        for i in range(len(raw_data) - 1):
+            row = transform_row(raw_data[i], raw_data[i + 1], pip_multiplier)
+            writer.writerow(row)
+
 
 def main():
-    """ Main in transforming data for ar_daily strategy."""
+    """ Main in transforming data for strategy Euler."""
 
     for instrument in common.ALL_PAIRS:
-        in_file = "{0}/data/store/candles/daily/{1}.csv". \
-                   format(common.PROJECT_DIR, instrument)
-        out_file = "store/{0}.csv".format(instrument)
-
-        if 'JPY' in instrument:
-            transform(in_file, out_file, 100)
-        else:
-            transform(in_file, out_file, 10000)
+        in_file = euler.get_raw_data(instrument)
+        out_file = euler.get_clean_data(instrument)
+        pip_multiplier = util.get_pip_multiplier(instrument)
+        transform(in_file, out_file, pip_multiplier)
 
 # Main.
 if __name__ == "__main__":

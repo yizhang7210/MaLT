@@ -1,9 +1,9 @@
-""" This is the test module for strategy Euler."""
+""" This is the test module for transformer.py"""
 
-import unittest
-import os
 import csv
-import common
+import os
+import unittest
+from strategies.euler import euler
 from strategies.euler import transformer
 
 class TestTransformer(unittest.TestCase):
@@ -21,9 +21,9 @@ class TestTransformer(unittest.TestCase):
     def test_transformation(self):
         """ Test the data gets transformed and written properly."""
         # Pick the path and transform the data.
-        in_file = "{0}/data/store/candles/daily/USD_CHF.csv". \
-                    format(common.PROJECT_DIR)
-        transformer.transform(in_file, self.tmp_file, 10000)
+        in_file = euler.get_raw_data("USD_CHF")
+        out_file = self.tmp_file
+        transformer.transform(in_file, out_file, 10000)
 
         # Read the file and check the numbers.
         results = []

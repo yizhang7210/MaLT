@@ -1,9 +1,14 @@
-""" This is the test module for the data component."""
+""" This is the test module for rates.py"""
 
 import unittest
 import os
 import csv
 from data import rates
+
+
+#====================================================================
+#   Classes:
+#====================================================================
 
 class TestDailyCandles(unittest.TestCase):
     """ Class for testing daily candles. """
@@ -45,6 +50,11 @@ class TestDailyCandles(unittest.TestCase):
         self.assertTrue('time' in results[0])
         self.assertTrue('99.115' in results[5])
         self.assertTrue('2013-11-19' in results[9])
+
+
+#====================================================================
+#   Functions:
+#====================================================================
 
 # Main.
 if __name__ == "__main__":

@@ -1,8 +1,12 @@
-""" This module provides common resources shared among modules
-    in the Data component.
-"""
+""" This module provides common resources shared among the project."""
+
 
 import os
+
+
+#====================================================================
+#   Constants:
+#====================================================================
 
 # REST end-points.
 GAME_URL = "api-fxpractice.oanda.com"
@@ -15,8 +19,17 @@ TRADE_TOKEN = ""
 # Currency pairs.
 ALL_PAIRS = ['EUR_USD', 'USD_JPY', 'GBP_USD', 'USD_CHF', 'USD_CAD']
 
-# Project Directory.
+# Project Directories.
 PROJECT_DIR = os.environ['PYTHONPATH']
+DAILY_CANDLES = "{0}/data/store/candles/daily".format(PROJECT_DIR)
 
 # Start day of historical data.
 START_DATE = '2005-01-01'
+
+# Terminologies
+BUY = "buy"
+SELL = "sell"
+
+
+
+

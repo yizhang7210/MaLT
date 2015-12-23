@@ -8,11 +8,17 @@ import json
 import common
 import datetime
 
+
+#====================================================================
+#   Functions:
+#====================================================================
+
 def get_daily_candles(instrument, start_date, end_date):
     """ Obtain a list of daily bid-ask candles for the given instrument.
         Candles are from start_date to end_date, both inclusive.
-        Days with no market activities do NOT have candles.
-        Candles are aligned according to New York time. Exactly 5 per week.
+        Days with no market activities as well as non-trading days do NOT
+        have candles. Candles are aligned according to New York time therefore
+        should be exactly 5 per week.
 
         Args:
             instrument: String. The currency pair. e.g. "EUR_USD".
@@ -54,8 +60,8 @@ def write_candles_to_csv(candles, out_file):
     """ Write the candles to the out_file file as a csv.
 
         Args:
-            candles: List of dictinoaries. List of candles containing open,
-                close, high and low, time and volume.
+            candles: List of dictionaries. List of candles containing open,
+                close, high and low of bid and ask, time and volume.
             out_file: String. Location of the output file.
 
         Returns:
@@ -84,6 +90,7 @@ def write_candles_to_csv(candles, out_file):
                 row = [date] + [candle.get(field) for field in field_names[1:]]
                 writer.writerow(row)
 
+
 def import_daily_candles():
     """ Fetch daily candles from common.START_DATE to date
         for all currency pairs.
@@ -96,8 +103,7 @@ def import_daily_candles():
     """
     for instrument in common.ALL_PAIRS:
         # Set up the output files.
-        out_file_path = "{0}/data/store/candles/daily/{1}.csv". \
-                         format(common.PROJECT_DIR, instrument)
+        out_file_path = "{0}/{1}.csv".format(common.DAILY_CANDLES, instrument)
         start_date = common.START_DATE
         end_date = str(datetime.date.today() - datetime.timedelta(1))
 
@@ -105,10 +111,11 @@ def import_daily_candles():
         candles = get_daily_candles(instrument, start_date, end_date)
         write_candles_to_csv(candles, out_file_path)
 
+
 def main():
-    """ Main in Data component.
+    """ Main in data component.
         1. Fetch daily candles from common.START_DATE to date
-        for all currency pairs.
+        for all currency pairs in common.ALL_PAIRS.
     """
     import_daily_candles()
 
