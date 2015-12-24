@@ -36,7 +36,7 @@ class BackTester():
         self.test_data = transformer.read_raw_file(self.test_file)
 
 
-    def dry_run(self, test_pred, threshold):
+    def dry_run(self, test_pred, threshold, **kwargs):
         """ Do a dry run of this strategy on self.test_data as if the strategy
             was put in place. Produce a report on the profitability of this
             strategy over the given period.
@@ -47,6 +47,10 @@ class BackTester():
                 threshold: Float. Positive. The strategy will take action if
                     the predicted price change is above threshold. e.g. if
                     predicted price is < -threshold, we will sell.
+                kwargs: Named arguments, including:
+                    print_result: boolean. Whether to print dry run report.
+                    export_plot: boolean. Whether to plot the daily balance.
+
             Returns:
                 balance: List of Float. Overall profit/loss for every day.
         """
@@ -76,32 +80,27 @@ class BackTester():
             actual = euler.get_price_change(row, self.pip_multiplier)
 
             # Figure out the action we take and the units.
-            if predicted > threshold:
-                direction = common.BUY
-                units = get_units(predicted, threshold)
-            elif predicted < -threshold:
-                direction = common.SELL
-                units = get_units(predicted, threshold)
-            else:
-                balance[i] = balance[i - 1]
-                continue
+            units = get_units(predicted, threshold)
 
             # Calculate profit/loss for this day.
-            p_l = euler.get_profit_loss(row, units, direction)
+            p_l = euler.get_profit_loss(row, units)
 
             # Update daily profit/loss
             balance[i] = balance[i - 1] + p_l
 
             # Add to the report.
-            report += euler.format_row(date, direction, predicted, actual, p_l)
+            report += euler.format_row(date, units, predicted, actual, p_l)
 
-        # Do some plots.
-        plot.plot(balance)
-        plot.savefig(self.instrument)
-        plot.close()
+        if 'export_plot' in kwargs and kwargs['export_plot']:
+            # Do some plots.
+            plot.plot(balance)
+            plot.savefig(self.instrument)
+            plot.close()
 
         report += "Total profit/loss: {0}".format(balance[-1])
-        print(report)
+
+        if 'print_result' in kwargs and kwargs['print_result']:
+            print(report)
 
         return balance
 
@@ -119,12 +118,13 @@ def get_units(predicted, threshold):
             threshold: Float. A threshold below which no action is taken.
 
         Returns:
-            units: int >= 0. Number of units to buy or sell at open.
+            units: Signed int. Number of units to buy or sell at open.
+                Positive for buy. Negative for sell.
     """
     if abs(predicted) < threshold:
         return 0
     else:
-        return abs(int(predicted))
+        return int(predicted)
 
 
 def main():
@@ -137,7 +137,7 @@ def main():
         pred, result = learner.test_model(model)
         print(result)
         tester = BackTester(instrument)
-        tester.dry_run(pred, 100)
+        tester.dry_run(pred, 100, export_plot=True)
 
 # Main.
 if __name__ == "__main__":

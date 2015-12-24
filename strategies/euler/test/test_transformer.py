@@ -40,8 +40,8 @@ class TestTransformer(unittest.TestCase):
         self.assertEqual(results[236][3], '3.0')
         self.assertEqual(results[387][4], '59.0')
         self.assertEqual(results[1822][5], '-27.8')
-        self.assertEqual(results[2618][6], '255.6')
-        self.assertEqual(results[2811][7], '49.0')
+        self.assertEqual(results[-628][6], '23.6')
+        self.assertEqual(results[-50][7], '4.8')
 
 # Main.
 if __name__ == "__main__":
