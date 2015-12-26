@@ -1,16 +1,23 @@
 """ This is the test module for learner.py"""
 
+import common
 import unittest
 from sklearn import tree
 from strategies import util
 from strategies.euler.learner import Learner
+
+
+#===============================================================================
+# Classes:
+#===============================================================================
 
 class TestLearner(unittest.TestCase):
     """ Class for testing learner."""
 
     def setUp(self):
         """ Set up temporary files."""
-        self.tmp_file = "GBP_USD_test_clean.csv"
+        self.tmp_file = "{0}/GBP_USD_test_clean.csv". \
+                         format(common.PROJECT_DIR + "/strategies/euler/test")
 
     def tearDown(self):
         """ Delete temporary files."""
@@ -37,6 +44,10 @@ class TestLearner(unittest.TestCase):
         self.assertEqual(round(result['ave_diff'], 4), 88.3980)
         self.assertEqual(round(result['prop_op'], 4), 0.4341)
 
+
+#===============================================================================
+#   Functions:
+#===============================================================================
 
 # Main.
 if __name__ == "__main__":

@@ -4,16 +4,17 @@
 # TODO: Euler with take profit (predicted amount) and stoploss (half predicted
 #       amount opposite direction)
 # TODO: Neural networks for learning.
-# TODO: parameter tuning.
+# TODO: update __init__.py for euler.
+# TODO: Add run test suite instead of individual tests.
 
 import numpy as np
 from strategies import util
 from strategies.euler import euler
 
 
-#====================================================================
+#===============================================================================
 #   Classes:
-#====================================================================
+#===============================================================================
 
 class Learner:
     """ Class responsible for learning and predicting rates from
@@ -24,7 +25,7 @@ class Learner:
         """ Initialize the Learner class.
 
             Args:
-                instrument: String. Name of the instrument of interest.
+                instrument: string. Name of the instrument of interest.
 
             Returns:
                 void.
@@ -40,13 +41,13 @@ class Learner:
             next day. Training and test data both come from self.data_file.
 
             Args:
-                model: Any sklearn Classifier or Regressor interface.
+                model: sklearn Classifier or Regressor interface.
                     Data from self.data_mat will be used to fit this model.
-                sample_rate: Float. Proportion of data used for training set.
-                model_params: Named arguments. Parameters for the model.
+                sample_rate: float. Proportion of data used for training set.
+                model_params: named arguments. Parameters for the model.
 
             Returns:
-                void.
+                model: sklearn Classifier or Regressor. Trained input model.
         """
         # Update the sample rate and index.
         self.sample_index = int(self.data_mat.shape[0] * sample_rate)
@@ -59,18 +60,19 @@ class Learner:
         model.set_params(**model_params)
         model.fit(train_set, train_val)
 
+        return model
 
     def test_model(self, model):
         """ Run a preliminary evaluation of model in terms of its accuracy.
 
             Args:
-                model: An sklearn Classifier or Regressor interface.
+                model: sklearn Classifier or Regressor interface.
                     This is the model that will be evaluated.
 
             Returns:
                 test_pred: np.array of dim 1. Prediction results on the test
                     sample from self.sample_index to the end of self.data_mat.
-                results: Dictionary. Including:
+                results: dictionary. Including:
                     ave_diff: Average of prediction error.
                     prop_op: Proportion of predictions in the wrong direction.
         """

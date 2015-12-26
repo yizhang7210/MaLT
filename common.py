@@ -4,9 +4,9 @@
 import os
 
 
-#====================================================================
+#===============================================================================
 #   Constants:
-#====================================================================
+#===============================================================================
 
 # REST end-points.
 GAME_URL = "api-fxpractice.oanda.com"
@@ -25,10 +25,6 @@ DAILY_CANDLES = "{0}/data/store/candles/daily".format(PROJECT_DIR)
 
 # Start day of historical data.
 START_DATE = '2005-01-01'
-
-# Terminologies
-BUY = "buy"
-SELL = "sell"
 
 
 

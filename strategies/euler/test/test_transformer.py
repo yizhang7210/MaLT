@@ -6,6 +6,11 @@ import unittest
 from strategies.euler import euler
 from strategies.euler import transformer
 
+
+#===============================================================================
+# Classes:
+#===============================================================================
+
 class TestTransformer(unittest.TestCase):
     """ Class for testing transformer."""
 
@@ -42,6 +47,11 @@ class TestTransformer(unittest.TestCase):
         self.assertEqual(results[1822][5], '-27.8')
         self.assertEqual(results[-628][6], '23.6')
         self.assertEqual(results[-50][7], '4.8')
+
+
+#===============================================================================
+#   Functions:
+#===============================================================================
 
 # Main.
 if __name__ == "__main__":

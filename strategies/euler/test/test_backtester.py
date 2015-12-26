@@ -1,5 +1,6 @@
 """ This is the test module for backtester.py"""
 
+import common
 import unittest
 from sklearn import tree
 from strategies import util
@@ -7,13 +8,20 @@ from strategies.euler import transformer
 from strategies.euler.backtester import BackTester
 from strategies.euler.learner import Learner
 
+
+#===============================================================================
+# Classes:
+#===============================================================================
+
 class TestBackTester(unittest.TestCase):
     """ Class for testing backtester."""
 
     def setUp(self):
         """ Set up temporary files."""
-        self.tmp_raw_file = "GBP_USD_test_raw.csv"
-        self.tmp_clean_file = "GBP_USD_test_clean.csv"
+        self.tmp_raw_file = "{0}/GBP_USD_test_raw.csv". \
+                         format(common.PROJECT_DIR + "/strategies/euler/test")
+        self.tmp_clean_file = "{0}/GBP_USD_test_clean.csv". \
+                         format(common.PROJECT_DIR + "/strategies/euler/test")
 
 
     def tearDown(self):
@@ -46,6 +54,10 @@ class TestBackTester(unittest.TestCase):
         self.assertEqual(round(balance[-30], 4), -20.7953)
         self.assertEqual(round(sum(balance), 4), -4088.2712)
 
+
+#===============================================================================
+#   Functions:
+#===============================================================================
 
 # Main.
 if __name__ == "__main__":

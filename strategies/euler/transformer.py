@@ -8,20 +8,20 @@ from strategies import util
 from strategies.euler import euler
 
 
-#====================================================================
+#===============================================================================
 #   Functions:
-#====================================================================
+#===============================================================================
 
 def build_features(row, pip_multiplier):
     """ Return the row without the date, openBid and volume.
         Then take away the openBid price.
 
         Args:
-            row: List of Strings. A row from data file in ./store/
+            row: list of Strings. A row from data file in ./store/
             pip_multiplier: int. The multiplier for calculating pip from price.
 
         Returns:
-            features: List of Floats. The quantities are: highBid, lowBid,
+            features: list of floats. The quantities are: highBid, lowBid,
                 closeBid, openAsk, highAsk, lowAsk and closeAsk.
                 All relative to openBid, and in pips.
     """
@@ -35,10 +35,10 @@ def read_raw_file(input_file):
     """ Read the raw input file to a nice format.
 
         Args:
-            input_file: String. Location of the input raw data file.
+            input_file: string. Location of the input raw data file.
 
         Returns:
-            data: List of list of Strings. Each entry is a daily candle.
+            data: list of list of Strings. Each entry is a daily candle.
                 Within a daily candle, it's date, OHLC of bidAsk and volume.
     """
     with open(input_file, 'r') as input_handle:
@@ -54,13 +54,13 @@ def transform_row(row, next_row, pip_multiplier):
     """ Return the transformed row with features and target variable.
 
         Args:
-            row: List of Strings. A row from the raw data file representing
+            row: list of Strings. A row from the raw data file representing
                 today's candle.
-            next_row: List of Strings. The row representing tomorrow's candle.
+            next_row: list of Strings. The row representing tomorrow's candle.
             pip_multiplier: int. The multiplier for calculating pip from price.
 
         Returns:
-            row: List of Floats. Combine the features and the target.
+            row: list of floats. Combine the features and the target.
     """
     features = build_features(row, pip_multiplier)
     target = euler.get_price_change(next_row, pip_multiplier)
@@ -80,11 +80,11 @@ def transform(input_file, output_file, pip_multiplier):
             if prices stay relatively still, we don't buy or sell. It's 0.
 
         Args:
-            input_file: String. Name of the raw daily candle file, should
+            input_file: string. Name of the raw daily candle file, should
                 be under common.DAILY_CANDLES.
-            output_file: String. Name of the normalized file, should be under
+            output_file: string. Name of the normalized file, should be under
                 ./store.
-            pip_multiplier: Int. Factor for converting price to pips.
+            pip_multiplier: int. Factor for converting price to pips.
 
         Returns:
             void.

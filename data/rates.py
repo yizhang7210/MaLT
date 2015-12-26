@@ -9,9 +9,9 @@ import common
 import datetime
 
 
-#====================================================================
+#===============================================================================
 #   Functions:
-#====================================================================
+#===============================================================================
 
 def get_daily_candles(instrument, start_date, end_date):
     """ Obtain a list of daily bid-ask candles for the given instrument.
@@ -21,12 +21,12 @@ def get_daily_candles(instrument, start_date, end_date):
         should be exactly 5 per week.
 
         Args:
-            instrument: String. The currency pair. e.g. "EUR_USD".
-            start_date: String. Formatted start date. e.g. "2015-11-24".
-            end_date: Sting. Formatted end date. e.g. "2015-11-28".
+            instrument: string. The currency pair. e.g. "EUR_USD".
+            start_date: string. Formatted start date. e.g. "2015-11-24".
+            end_date: sting. Formatted end date. e.g. "2015-11-28".
 
         Returns:
-            candles: List of dictionaries, each representing a daily candle.
+            candles: list of dictionaries, each representing a daily candle.
             Example:
                 [{'volume': 28947, 'highAsk': 1.07594, 'openAsk': 1.0746,
                 'lowAsk': 1.06757, 'lowBid': 1.06741, 'closeBid': 1.06853,
@@ -60,9 +60,9 @@ def write_candles_to_csv(candles, out_file):
     """ Write the candles to the out_file file as a csv.
 
         Args:
-            candles: List of dictionaries. List of candles containing open,
+            candles: list of dictionaries. List of candles containing open,
                 close, high and low of bid and ask, time and volume.
-            out_file: String. Location of the output file.
+            out_file: string. Location of the output file.
 
         Returns:
             void.
