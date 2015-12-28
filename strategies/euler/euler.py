@@ -47,28 +47,48 @@ def get_clean_data(instrument):
     return path
 
 
-def get_profit_loss(row, units):
+def get_profit_loss(row, units, pip_multiplier, stop_loss_pip=0):
     """ Calculate profit/loss for a single day from the daily candle.
 
         Args:
-            row: list of Strings. Date + OHLC of Bid/Ask + volume.
+            row: list of strings. Should contain: time, openBid, highBid,
+                lowBid, closeBid, openAsk, highAsk, lowAsk, closeAsk, volume.
             units: signed int. Number of units for trade.
                 Positive for buy. Negative for sell.
+            pip_multiplier: int. The multiplier for calculating pip from price.
+            stop_loss_pip: int. Stop loss in pips. Default to not use it.
 
         Returns:
             profit_loss: float. Profit or loss from buy at open and sell at
                 close, or sell at open and buy at close.
     """
+    row = util.list_to_float(row[1:-1])
 
     if units == 0:
         # No action.
         profit_loss = 0
     elif units > 0:
         # BUY.
-        profit_loss = units - units * float(row[5]) / float(row[4])
+        # If stop loss set and lowBid droped below it, it triggers.
+        stop_loss_price = row[4] - stop_loss_pip / pip_multiplier
+
+        if stop_loss_pip > 0 and row[2] < stop_loss_price:
+            sold_price = stop_loss_price
+        else:
+            sold_price = row[3]
+        # Now calculate profit/loss.
+        profit_loss = units - units * row[4] / sold_price
     else:
         # SELL.
-        profit_loss = units - units * float(row[1]) / float(row[8])
+        # If stop loss set and highAsk rose above it, it triggers.
+        stop_loss_price = row[0] + stop_loss_pip / pip_multiplier
+
+        if stop_loss_pip > 0 and row[5] > stop_loss_price:
+            bought_price = stop_loss_price
+        else:
+            bought_price = row[7]
+        # Now calculate profit/loss.
+        profit_loss = units - units * row[0] / bought_price
 
     return profit_loss
 
@@ -85,7 +105,6 @@ def get_price_change(row, pip_multiplier):
         Returns:
             float. Profitable price change for the day in pips.
     """
-    # TODO: use dictionary instead of indices.
     row = util.list_to_float(row[1:-1])
     if row[3] - row[4] > 0:
         diff = row[3] - row[4]

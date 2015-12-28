@@ -1,11 +1,8 @@
 """ This module is responsible for the learning of historical data"""
 # TODO: Next: logistic regression. Next: formulate as classification problem.
 #       All small changes are essentially the same, we don't care.
-# TODO: Euler with take profit (predicted amount) and stoploss (half predicted
-#       amount opposite direction)
 # TODO: Neural networks for learning.
-# TODO: update __init__.py for euler.
-# TODO: Add run test suite instead of individual tests.
+
 
 import numpy as np
 from strategies import util

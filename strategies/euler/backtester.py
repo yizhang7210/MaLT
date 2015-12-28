@@ -2,7 +2,6 @@
     daily candles.
 """
 
-import common
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import tree
@@ -64,6 +63,7 @@ class BackTester():
                     the predicted price change is above threshold. e.g. if
                     predicted price is < -threshold, we will sell.
                 kwargs: named arguments, including:
+                    use_stop_loss: boolean. Whether to use stop_loss orders.
                     print_result: boolean. Whether to print dry run report.
                     export_plot: string. Name of the plot to be saved.
 
@@ -88,9 +88,6 @@ class BackTester():
             # Fetch the row.
             row = test_rows[i]
 
-            # Get the date first.
-            date = row[0]
-
             # Fetch the predicted and actual price change.
             predicted = test_pred[i]
             actual = euler.get_price_change(row, self.pip_multiplier)
@@ -98,14 +95,20 @@ class BackTester():
             # Figure out the action we take and the units.
             units = get_units(predicted, threshold)
 
+            # Get the stop loss prices if set to use stop_loss orders.
+            if 'use_stop_loss' in kwargs and kwargs['use_stop_loss']:
+                s_l = int(abs(predicted) / 2)
+            else:
+                s_l = 0
+
             # Calculate profit/loss for this day.
-            p_l = euler.get_profit_loss(row, units)
+            p_l = euler.get_profit_loss(row, units, self.pip_multiplier, s_l)
 
             # Update daily profit/loss
             balance[i] = balance[i - 1] + p_l
 
-            # Add to the report.
-            report += euler.format_row(date, units, predicted, actual, p_l)
+            # Add to the report. row[0] is date.
+            report += euler.format_row(row[0], units, predicted, actual, p_l)
 
         # Add final total profit/loss to the report.
         report += "Total profit/loss: {0}".format(balance[-1])
@@ -184,7 +187,7 @@ def tune_model(model, instrument, model_param_space):
             model = learner.build_model(model, 0.9, **model_param)
             pred, _ = learner.test_model(model)
 
-            balance = tester.dry_run(pred, threshold)
+            balance = tester.dry_run(pred, threshold, use_stop_loss=True)
             ave_balance.append(balance)
 
             # Update the lowest balance point of the dry run.
@@ -206,10 +209,11 @@ def main():
 
     model = tree.DecisionTreeRegressor()
 
-    for instrument in common.ALL_PAIRS:
+    for instrument in ["EUR_USD"]:
         all_params = util.build_tree_params()
         best_model_index = tune_model(model, instrument, all_params)
         print(instrument)
+        print("best model index: " + str(best_model_index))
         print(all_params[best_model_index])
 
 
