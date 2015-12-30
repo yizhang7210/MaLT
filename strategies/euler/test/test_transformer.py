@@ -44,9 +44,9 @@ class TestTransformer(unittest.TestCase):
         self.assertEqual(results[28][2], '-83.0')
         self.assertEqual(results[236][3], '3.0')
         self.assertEqual(results[387][4], '59.0')
-        self.assertEqual(results[1822][5], '-27.8')
-        self.assertEqual(results[-628][6], '23.6')
-        self.assertEqual(results[-50][7], '4.8')
+        self.assertEqual(results[822][5], '-142.4')
+        self.assertEqual(results[1298][6], '-8.1')
+        self.assertEqual(results[2150][7], '-39.6')
 
 
 #===============================================================================

@@ -32,6 +32,9 @@ class Learner:
         self.data_mat = util.read_to_matrix(self.data_file)
         self.sample_index = 0
 
+        # Checking input read from file.
+        assert self.data_mat[0].size == 8
+
 
     def build_model(self, model, sample_rate, **model_params):
         """ Build a predictive model for predicting the price change of the

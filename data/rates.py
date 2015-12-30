@@ -44,7 +44,6 @@ def get_daily_candles(instrument, start_date, end_date):
 
     # Open connection. Send request. Get response.
     # TODO: Distinguish between game and trade.
-    # TODO: Deal with connection errors/non-ideal responses.
     conn = http.client.HTTPSConnection(common.GAME_URL)
     conn.request("GET", request_string, "", {"Authorization" : header_string})
     response = conn.getresponse()
@@ -53,6 +52,11 @@ def get_daily_candles(instrument, start_date, end_date):
 
     # Parse the JSON from the response and select 'candles'.
     candles = json.loads(response_content)['candles']
+
+    # Check received candles are valid.
+    assert len(candles[0]) == 11 and set(common.CANDLE_FEATURES).issubset( \
+            set(candles[-1].keys()))
+
     return candles
 
 
@@ -67,16 +71,14 @@ def write_candles_to_csv(candles, out_file):
         Returns:
             void.
     """
-    # Set up the field names.
+    # Set up the date.
     date_len = len("2000-01-01")
-    field_names = ['time', 'openBid', 'highBid', 'lowBid', 'closeBid',
-                   'openAsk', 'highAsk', 'lowAsk', 'closeAsk', 'volume']
 
     # Write each candle line by line.
     with open(out_file, 'w') as csv_handle:
         # Write the headers first.
         writer = csv.writer(csv_handle, delimiter=' ')
-        writer.writerow(field_names)
+        writer.writerow(common.CANDLE_FEATURES)
 
         # Initialize candle.
         candle = None
@@ -87,7 +89,8 @@ def write_candles_to_csv(candles, out_file):
 
             # The date needs to be Sunday - Thursday.
             if date_obj.weekday() in [6, 0, 1, 2, 3]:
-                row = [date] + [candle.get(field) for field in field_names[1:]]
+                row = [date] + [candle.get(field) \
+                    for field in common.CANDLE_FEATURES[1:]]
                 writer.writerow(row)
 
 

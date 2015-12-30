@@ -26,6 +26,8 @@ DAILY_CANDLES = "{0}/data/store/candles/daily".format(PROJECT_DIR)
 # Start day of historical data.
 START_DATE = '2005-01-01'
 
-
+# Daily candles field names.
+CANDLE_FEATURES = ['time', 'openBid', 'highBid', 'lowBid', 'closeBid'] + \
+                  ['openAsk', 'highAsk', 'lowAsk', 'closeAsk', 'volume']
 
 

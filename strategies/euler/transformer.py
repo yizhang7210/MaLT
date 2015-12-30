@@ -47,6 +47,10 @@ def read_raw_file(input_file):
 
     data = [x.split(' ') for x in data]
 
+    # Check validity of data since reading from file.
+    # Last entry should be volume and should be large. The number is arbitrary.
+    assert len(data[0]) == 10 and int(data[-1][9]) > 200
+
     return data
 
 
