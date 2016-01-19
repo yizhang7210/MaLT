@@ -1,11 +1,10 @@
-""" This is the test module for transformer.py"""
+""" This is the test module for transformer.py."""
 
+import common
 import csv
 import os
 import unittest
-from strategies.euler import euler
 from strategies.euler import transformer
-
 
 #===============================================================================
 # Classes:
@@ -18,15 +17,21 @@ class TestTransformer(unittest.TestCase):
         """ Set up temporary files."""
         self.tmp_file = "tmp.csv"
 
+        return
+
+
     def tearDown(self):
         """ Delete temporary files."""
         if os.path.isfile(self.tmp_file):
             os.remove(self.tmp_file)
 
+        return
+
+
     def test_transformation(self):
         """ Test the data gets transformed and written properly."""
         # Pick the path and transform the data.
-        in_file = euler.get_raw_data("USD_CHF")
+        in_file = common.get_raw_data("USD_CHF")
         out_file = self.tmp_file
         transformer.transform(in_file, out_file, 10000)
 
@@ -37,6 +42,7 @@ class TestTransformer(unittest.TestCase):
             for row in reader:
                 results.append(row)
 
+        # Make sure it's working properly.
         self.assertTrue(len(results) > 2800)
         self.assertEqual(len(results[0]), 8)
         self.assertEqual(results[0][0], '155.0')
@@ -48,6 +54,8 @@ class TestTransformer(unittest.TestCase):
         self.assertEqual(results[1298][6], '-8.1')
         self.assertEqual(results[2150][7], '-39.6')
 
+        return
+
 
 #===============================================================================
 #   Functions:
@@ -56,8 +64,5 @@ class TestTransformer(unittest.TestCase):
 # Main.
 if __name__ == "__main__":
     unittest.main()
-
-
-
 
 

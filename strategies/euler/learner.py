@@ -1,13 +1,10 @@
 """ This module is responsible for the learning of historical data"""
-# TODO: Next: logistic regression. Next: formulate as classification problem.
-#       All small changes are essentially the same, we don't care.
-# TODO: Neural networks for learning.
-
+# TODO: Classification. logistic regression. Neural Network.
+# TODO: Formulate as outliner detection.
 
 import numpy as np
-from strategies import util
-from strategies.euler import euler
-
+from strategies import base
+from strategies.euler import util
 
 #===============================================================================
 #   Classes:
@@ -22,18 +19,20 @@ class Learner:
         """ Initialize the Learner class.
 
             Args:
-                instrument: string. Name of the instrument of interest.
+                instrument: string. The currency pair. e.g. 'EUR_USD'.
 
             Returns:
                 void.
         """
         self.instrument = instrument
-        self.data_file = euler.get_clean_data(instrument)
-        self.data_mat = util.read_to_matrix(self.data_file)
+        self.data_file = util.get_clean_data(instrument)
+        self.data_mat = base.read_features(self.data_file)
         self.sample_index = 0
 
         # Checking input read from file.
-        assert self.data_mat[0].size == 8
+        assert self.data_mat.shape[1] == 8
+
+        return
 
 
     def build_model(self, model, sample_rate, **model_params):
@@ -61,6 +60,7 @@ class Learner:
         model.fit(train_set, train_val)
 
         return model
+
 
     def test_model(self, model):
         """ Run a preliminary evaluation of model in terms of its accuracy.
@@ -92,15 +92,5 @@ class Learner:
         results['prop_op'] = wrongs.sum() / wrongs.size
 
         return test_pred, results
-
-
-
-
-
-
-
-
-
-
 
 

@@ -1,50 +1,53 @@
-""" This is the test module for backtester.py"""
+""" This is the test module for euler.py."""
 
 import common
 import unittest
 from sklearn import tree
-from strategies import util
-from strategies.euler import transformer
-from strategies.euler.backtester import BackTester
+from strategies import base
+from strategies.euler import euler, transformer
 from strategies.euler.learner import Learner
-
 
 #===============================================================================
 # Classes:
 #===============================================================================
 
-class TestBackTester(unittest.TestCase):
-    """ Class for testing backtester."""
+class TestEuler(unittest.TestCase):
+    """ Class for testing euler."""
 
     def setUp(self):
         """ Set up temporary files."""
-        self.tmp_raw_file = "{0}/GBP_USD_test_raw.csv". \
-                         format(common.PROJECT_DIR + "/strategies/euler/test")
-        self.tmp_clean_file = "{0}/GBP_USD_test_clean.csv". \
-                         format(common.PROJECT_DIR + "/strategies/euler/test")
+        test_dir = common.PROJECT_DIR + '/strategies/euler/test'
+        self.tmp_raw_file = "{0}/GBP_USD_test_raw.csv".format(test_dir)
+        self.tmp_clean_file = "{0}/GBP_USD_test_clean.csv".format(test_dir)
+
+        return
 
 
     def tearDown(self):
         """ Delete temporary files."""
+        pass
 
 
-    def test_backtester(self):
-        """ Test the backtester tests a model on historical data properly"""
+    def test_dry_run(self):
+        """ Test dry run in euler. Check that it tests a model on historical
+            data properly.
+        """
         # Initialize model with fixed random state.
         model = tree.DecisionTreeRegressor(random_state=888)
 
         # Initialize learner and force load test data.
         learner = Learner("GBP_USD")
-        learner.data_mat = util.read_to_matrix(self.tmp_clean_file)
+        learner.data_mat = base.read_features(self.tmp_clean_file)
 
         # Build model and test preliminary results.
         learner.build_model(model, 0.78)
         pred, _ = learner.test_model(model)
 
-        # Initialize backtester and force load test data.
-        tester = BackTester("GBP_USD")
-        tester.test_data = transformer.read_raw_file(self.tmp_raw_file)
-        balance = tester.dry_run(pred, 85, print_result=False)
+        # Initialize Euler and force load test data.
+        strategy = euler.Euler("GBP_USD")
+        strategy.set_params(unit_shape='linear', threshold=85)
+        strategy.test_data = transformer.read_raw_file(self.tmp_raw_file)
+        balance = strategy.dry_run(pred)
 
         # Test the results.
         self.assertEqual(balance.size, 628)
@@ -54,6 +57,8 @@ class TestBackTester(unittest.TestCase):
         self.assertEqual(round(balance[-30], 4), -20.7953)
         self.assertEqual(round(sum(balance), 4), -4088.2712)
 
+        return
+
 
 #===============================================================================
 #   Functions:
@@ -62,15 +67,5 @@ class TestBackTester(unittest.TestCase):
 # Main.
 if __name__ == "__main__":
     unittest.main()
-
-
-
-
-
-
-
-
-
-
 
 

@@ -1,38 +1,60 @@
-""" This module is responsible for transforming raw data to
-    the appropriate format for strategy Euler.
+""" This module is responsible for transforming raw data to the appropriate
+    feature format for strategy Euler.
 """
 
-import csv
 import common
-from strategies import util
-from strategies.euler import euler
-
+import csv
+from strategies.euler import util
 
 #===============================================================================
 #   Functions:
 #===============================================================================
 
-def build_features(row, pip_multiplier):
+def list_to_features(row, pip_factor):
     """ Return the row without the date, openBid and volume.
         Then take away the openBid price.
 
         Args:
             row: list of Strings. A row from data file in ./store/
-            pip_multiplier: int. The multiplier for calculating pip from price.
+            pip_factor: int. The multiplier for calculating pip from price.
 
         Returns:
             features: list of floats. The quantities are: highBid, lowBid,
                 closeBid, openAsk, highAsk, lowAsk and closeAsk.
                 All relative to openBid, and in pips.
     """
-    row = util.list_to_float(row[1:-1])
+    row = common.list_to_float(row[1:-1])
     row = [x - row[0] for x in row[1:]]
-    features = [util.price_to_pip(x, pip_multiplier) for x in row]
+    features = [common.price_to_pip(x, pip_factor) for x in row]
+
+    return features
+
+
+def candle_to_features(candle, pip_factor):
+    """ Return the features but directly from candle information.
+
+        Args:
+            candle: dict. A dictionary representing information in a candle.
+            pip_factor: int. The multiplier for calculating pip from price.
+
+        Returns:
+            features: list of floats. The quantities are: highBid, lowBid,
+                closeBid, openAsk, highAsk, lowAsk and closeAsk.
+                All relative to openBid, and in pips.
+    """
+    # Transform the candle to a list first.
+    date = candle.get('time')[:common.DATE_LENGTH]
+    row = [date] + [candle.get(field) \
+        for field in common.CANDLE_FEATURES[1:]]
+
+    # Then to the features.
+    features = list_to_features(row, pip_factor)
+
     return features
 
 
 def read_raw_file(input_file):
-    """ Read the raw input file to a nice format.
+    """ Read the raw input file to a list.
 
         Args:
             input_file: string. Location of the input raw data file.
@@ -48,47 +70,49 @@ def read_raw_file(input_file):
     data = [x.split(' ') for x in data]
 
     # Check validity of data since reading from file.
-    # Last entry should be volume and should be large. The number is arbitrary.
+    # Last entry should be volume and should be large. The 200 is arbitrary.
     assert len(data[0]) == 10 and int(data[-1][9]) > 200
 
     return data
 
 
-def transform_row(row, next_row, pip_multiplier):
+def transform_row(row, next_row, pip_factor):
     """ Return the transformed row with features and target variable.
 
         Args:
             row: list of Strings. A row from the raw data file representing
                 today's candle.
             next_row: list of Strings. The row representing tomorrow's candle.
-            pip_multiplier: int. The multiplier for calculating pip from price.
+            pip_factor: int. The multiplier for calculating pip from price.
 
         Returns:
-            row: list of floats. Combine the features and the target.
+            data_point: list of floats. Combine the features and the target.
     """
-    features = build_features(row, pip_multiplier)
-    target = euler.get_price_change(next_row, pip_multiplier)
+    features = list_to_features(row, pip_factor)
+    target = util.get_price_change(next_row, pip_factor)
 
-    return features + [target]
+    data_point = features + [target]
+
+    return data_point
 
 
-def transform(input_file, output_file, pip_multiplier):
+def transform(input_file, output_file, pip_factor):
     """ Normalize daily candles.
         Features are:
             highBid, lowBid, closeBid, openAsk, highAsk,lowAsk,
             and closeAsk (all relative to openBid) in pips.
         Target variable is:
-            potential daily benefical price change in pips.
+            Potential daily profitable price change in pips.
             If prices rise enough, we have: closeBid - openAsk (> 0), buy.
             If prices fall enough, we have: closeAsk - openBid (< 0), sell.
             if prices stay relatively still, we don't buy or sell. It's 0.
 
         Args:
             input_file: string. Name of the raw daily candle file, should
-                be under common.DAILY_CANDLES.
+                be under the directory common.DAILY_CANDLES.
             output_file: string. Name of the normalized file, should be under
                 ./store.
-            pip_multiplier: int. Factor for converting price to pips.
+            pip_factor: int. The multiplier for calculating pip from price.
 
         Returns:
             void.
@@ -101,18 +125,25 @@ def transform(input_file, output_file, pip_multiplier):
         writer = csv.writer(output_handle, delimiter=' ')
 
         for i in range(len(raw_data) - 1):
-            row = transform_row(raw_data[i], raw_data[i + 1], pip_multiplier)
+            row = transform_row(raw_data[i], raw_data[i + 1], pip_factor)
             writer.writerow(row)
+
+    return
 
 
 def main():
     """ Main in transforming data for strategy Euler."""
-
     for instrument in common.ALL_PAIRS:
-        in_file = euler.get_raw_data(instrument)
-        out_file = euler.get_clean_data(instrument)
-        pip_multiplier = util.get_pip_multiplier(instrument)
-        transform(in_file, out_file, pip_multiplier)
+        # Gather necessary data.
+        in_file = common.get_raw_data(instrument)
+        out_file = util.get_clean_data(instrument)
+        pip_factor = common.get_pip_factor(instrument)
+
+        # Transform.
+        transform(in_file, out_file, pip_factor)
+
+    return
+
 
 # Main.
 if __name__ == "__main__":

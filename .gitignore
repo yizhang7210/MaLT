@@ -58,3 +58,8 @@ target/
 
 # Project data files
 store/
+
+# Serialized learning models for pricing prediction
+daily_strategy/
+
+
