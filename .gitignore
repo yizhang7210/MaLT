@@ -62,4 +62,5 @@ store/
 # Serialized learning models for pricing prediction
 daily_strategy/
 
-
+# Cron setup file
+cron_setup

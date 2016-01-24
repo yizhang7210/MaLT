@@ -1,6 +1,8 @@
 """ This module provides common resources shared among the project."""
 
 import os
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 #===============================================================================
