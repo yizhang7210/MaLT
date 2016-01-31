@@ -4,6 +4,7 @@
 """
 
 import common
+logger = common.get_logger(__name__)
 import datetime
 from data import rates
 
@@ -48,6 +49,10 @@ def main():
     """
     # Run only on Sunday - Thursday.
     if datetime.date.today().weekday() in [6, 0, 1, 2, 3]:
+
+        # Log enter.
+        logger.info("Starting daily train.")
+
         # Fetch all and save new rates.
         rates.main()
 
@@ -55,6 +60,10 @@ def main():
         for strategy_name in common.ALL_STRATEGIES:
             run(strategy_name)
 
+        # Log exit.
+        logger.info("Daily train done.")
+
+    return
 
 # Main.
 if __name__ == "__main__":

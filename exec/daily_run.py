@@ -3,6 +3,7 @@
 """
 
 import common
+logger = common.get_logger(__name__)
 import datetime
 import json
 import time
@@ -31,6 +32,9 @@ def get_yesterdays_candle(instrument):
     # is yesterday's candle.
     candle = rates.get_daily_candles(instrument, start_date, end_date)[-1]
 
+    # Log.
+    logger.info("Obtained yesterday's candles.")
+
     return candle
 
 
@@ -43,6 +47,8 @@ def run_at_day_close(executor):
         Returns:
             void.
     """
+    # Log and run.
+    logger.info("Day's close. Close all open trades.")
     executor.close_all_trades()
 
     return
@@ -59,6 +65,9 @@ def run_at_day_open(executor, instrument):
         Returns:
             void.
     """
+    # Log.
+    logger.info("Day's open. Dealing with %s.", instrument)
+
     # Get yesterday's candle first.
     yesterdays_candle = get_yesterdays_candle(instrument)
 
@@ -66,6 +75,7 @@ def run_at_day_open(executor, instrument):
     model_loc, param_loc = common.get_strategy_loc(instrument)
     model = joblib.load(model_loc)
     strategy_params = json.load(open(param_loc, 'r'))
+    logger.info("Strategy params: %s.", str(strategy_params))
 
     # Instantiate the right strategy object from name.
     name = strategy_params['name']
@@ -75,6 +85,7 @@ def run_at_day_open(executor, instrument):
     # Set the parameters.
     strategy.set_params(**strategy_params)
     strategy.model = model
+    logger.info("Model used: %s.", str(model))
 
     # Execute.
     strategy.execute(executor, yesterdays_candle)
@@ -108,11 +119,14 @@ def main():
         for instrument in common.ALL_PAIRS:
             run_at_day_open(executor, instrument)
 
+    # Log.
+    logger.info("Daily run done.")
+
     return
 
 
 # Main.
 if __name__ == "__main__":
     main()
-    print("Done")
+
 

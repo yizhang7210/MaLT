@@ -1,6 +1,7 @@
 """ This module defines the Executor class for actually executing trades."""
 
 import common
+logger = common.get_logger(__name__)
 import http.client
 import json
 
@@ -75,7 +76,11 @@ class Executor():
         conn.close()
 
         # Parse the JSON from the response and return the newly created trade id.
-        trade_id = json.loads(response_content)['tradeOpened']['id']
+        new_trade = json.loads(response_content)['tradeOpened']
+        trade_id = new_trade['id']
+
+        # Log the trade.
+        logger.info("Opend new trade: %s.", new_trade)
 
         return trade_id
 
@@ -103,8 +108,11 @@ class Executor():
         try:
             profit_loss = json.loads(response_content)['profit']
         except KeyError:
-            #TODO: What do we want to do when trying to close a non-existing trade?
+            logger.warn("Trying to close a non-existing trade %s.", trade_id)
             profit_loss = 0
+
+        # Log the closing of the trade.
+        logger.info("Closed trade %s.", trade_id)
 
         return profit_loss
 
@@ -118,6 +126,9 @@ class Executor():
             Returns:
                 trades. list of dicts. Each entry includes the details of a trade.
         """
+        # Log.
+        logger.info("Fetching all open trades.")
+
         # Construct request url.
         url = ("/v1/accounts/{0}/trades".format(self.account_id))
 
@@ -142,9 +153,11 @@ class Executor():
             Returns:
                 void.
         """
-        # TODO: Need a way to report success.
-        trades = self.get_all_trades()
+        # Log and close all.
+        logger.info("Closing all trades.")
 
+        # Get all trades and close.
+        trades = self.get_all_trades()
         for trade in trades:
             self.close_trade(trade['id'])
 

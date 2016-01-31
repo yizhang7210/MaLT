@@ -1,9 +1,12 @@
 """ This module provides common resources shared among the project."""
 
 import os
+import datetime
+import logging
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from logging.handlers import TimedRotatingFileHandler
 
 #===============================================================================
 #   Constants:
@@ -21,6 +24,29 @@ GAME_TEST_ACCOUNT = 5561814
 # Access tokens.
 GAME_TOKEN = "69683ec9c597687072f5793cbba7bfe4-e613b65d8adf1cabeec04cf6d65ab580"
 TRADE_TOKEN = ""
+
+#---------------------------------------
+# Data:
+#---------------------------------------
+
+# Currency pairs.
+ALL_PAIRS = ['EUR_USD', 'USD_JPY', 'GBP_USD', 'USD_CHF', 'USD_CAD']
+
+# Strategies:
+ALL_STRATEGIES = ['Euler']
+
+# Daily candles field names.
+CANDLE_FEATURES = ['time', 'openBid', 'highBid', 'lowBid', 'closeBid'] + \
+                  ['openAsk', 'highAsk', 'lowAsk', 'closeAsk', 'volume']
+
+# Project Directories.
+PROJECT_DIR = os.environ['PYTHONPATH']
+DAILY_CANDLES = "{0}/data/store/candles/daily".format(PROJECT_DIR)
+DAILY_STRATEGY = "{0}/exec/daily_strategy".format(PROJECT_DIR)
+
+# Start day of historical data.
+START_DATE = '2005-01-01'
+DATE_LENGTH = len(START_DATE)
 
 #---------------------------------------
 # Execution:
@@ -45,28 +71,8 @@ GAME_HEADER = {"Content-type": "application/x-www-form-urlencoded", \
 
 TRADE_HEADER = {}
 
-#---------------------------------------
-# Data:
-#---------------------------------------
-
-# Currency pairs.
-ALL_PAIRS = ['EUR_USD', 'USD_JPY', 'GBP_USD', 'USD_CHF', 'USD_CAD']
-
-# Strategies:
-ALL_STRATEGIES = ['Euler']
-
-# Daily candles field names.
-CANDLE_FEATURES = ['time', 'openBid', 'highBid', 'lowBid', 'closeBid'] + \
-                  ['openAsk', 'highAsk', 'lowAsk', 'closeAsk', 'volume']
-
-# Project Directories.
-PROJECT_DIR = os.environ['PYTHONPATH']
-DAILY_CANDLES = "{0}/data/store/candles/daily".format(PROJECT_DIR)
-DAILY_STRATEGY = "{0}/exec/daily_strategy".format(PROJECT_DIR)
-
-# Start day of historical data.
-START_DATE = '2005-01-01'
-DATE_LENGTH = len(START_DATE)
+# File log location.
+LOG_FILE = "{0}/daily.log".format(PROJECT_DIR)
 
 
 #===============================================================================
@@ -183,5 +189,44 @@ def get_raw_data(instrument):
     path = '{0}/{1}.csv'.format(DAILY_CANDLES, instrument)
 
     return path
+
+
+def get_logger(name):
+    """ Get the logger for logging events.
+
+        Args:
+            name: string. Name of the logger, should be the respective python
+                module.
+
+        Returns:
+            logger: logger. A logger ready for use.
+    """
+    # Get the logger.
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
+
+    # The handler. Create new log file every Sunday at 16:00.
+    time = datetime.time(16, 0, 0)
+    handler = TimedRotatingFileHandler(LOG_FILE, when='W6', atTime=time)
+    handler.setLevel(logging.INFO)
+
+    # The formatter.
+    log_string = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    formatter = logging.Formatter(log_string)
+
+    # Set the formatter and handler.
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    return logger
+
+
+
+
+
+
+
+
+
 
 

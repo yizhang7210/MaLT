@@ -1,6 +1,7 @@
 """ This module is responsible for defining the strategy class Euler."""
 
 import common
+logger = common.get_logger(__name__)
 import json
 import math
 import numpy as np
@@ -125,7 +126,7 @@ class Euler(BaseStrategy):
             # Units proportional to square root of predicted change.
             units = int(math.sqrt(abs(pred)) * common.ROOT_FACTOR)
         else:
-            # TODO: log.
+            logger.warn("euler.parse_units(): invalid unit shape.")
             return 0
 
         units = units * sign
@@ -155,8 +156,10 @@ class Euler(BaseStrategy):
         controls = self.parse_controls()
         units = self.parse_units(pred)
 
+        # Log.
+        logger.info("Executing strategy Euler.")
+
         # Make the decision.
-        # TODO: Log making the trade.
         executor.make_trade(self.instrument, units, **controls)
 
         return
@@ -236,6 +239,9 @@ class Euler(BaseStrategy):
                 self: Euler instance. With the params and model having the
                     highest score among all combinations.
         """
+        # Log enter.
+        logger.info("Euler: Selecting best for %s.", self.instrument)
+
         # Initialize the scores array and strategy parameters.
         scores = []
         strategy_params = util.get_euler_params()
@@ -276,6 +282,7 @@ class Euler(BaseStrategy):
         model_param = util.get_model_params(model)[best[1]]
         model = self.learner.build_model(model, 1, **model_param)
 
+        logger.info("Best score is: %s.", str(np.array(scores)[best]))
         self.set_params(**strategy_params[best[2]])
         self.model = model
 
@@ -291,6 +298,9 @@ class Euler(BaseStrategy):
             Returns:
                 void.
         """
+        # Log.
+        logger.info("Serializing the best model and params.")
+
         # Get the designated locations.
         model_loc, param_loc = common.get_strategy_loc(self.instrument)
 

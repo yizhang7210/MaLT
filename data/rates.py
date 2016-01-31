@@ -3,6 +3,7 @@
 """
 
 import common
+logger = common.get_logger(__name__)
 import csv
 import datetime
 import http.client
@@ -52,6 +53,9 @@ def get_daily_candles(instrument, start_date, end_date):
     # Check received candles are valid.
     assert (len(candles[0]) == 11 and
             set(common.CANDLE_FEATURES).issubset(set(candles[-1].keys())))
+
+    # Log
+    logger.info("Fetched daily candles for %s.", instrument)
 
     return candles
 
