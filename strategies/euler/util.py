@@ -64,8 +64,11 @@ def get_euler_params():
                 unit_shape: string. Describes the relationship between the
                     number of units and predicted value. One of 'constant',
                     'linear', 'quadratic', or 'root'
+                stop_loss: float. Price for stop loss order.
+                take_profit: float. Price for take profit order.
+                trailing_stop: float. Pips for trailing stop order.
     """
-    params = [{'threshold': x, 'unit_shape': shape} \
+    params = [{'threshold': x, 'unit_shape': shape, 'trailing_stop': 15} \
              for x in [40., 60., 80., 100.]\
              for shape in ['constant', 'linear', 'quadratic', 'root']]
 

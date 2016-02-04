@@ -2,7 +2,6 @@
 # TODO: Classification. logistic regression. Neural Network.
 # TODO: Formulate as outliner detection.
 
-import common
 import numpy as np
 from strategies import base
 from strategies.euler import util
