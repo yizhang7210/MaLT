@@ -103,7 +103,7 @@ def main():
             void.
     """
     # Initialize executor and check today's weekday.
-    executor = Executor(common.GAME_TEST_ACCOUNT)
+    executor = Executor(common.GAME_STAGING_ACCOUNT)
     weekday = datetime.date.today().weekday()
 
     # Need to run daily close on Monday - Friday.

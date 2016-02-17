@@ -64,3 +64,8 @@ daily_strategy/
 
 # Cron setup file
 cron_setup
+
+# Account information file
+account.info
+
+

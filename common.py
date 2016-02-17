@@ -2,6 +2,7 @@
 
 import os
 import datetime
+import json
 import logging
 import matplotlib
 matplotlib.use('Agg')
@@ -16,14 +17,18 @@ from logging.handlers import TimedRotatingFileHandler
 # Accounts:
 #---------------------------------------
 
+# Account Details:
+ACCOUNT_INFO = json.load(open('account.info', 'r'))
+
 # Account numbers:
-TRADE_ACCOUNT = 0
-GAME_ACCOUNT = 6483208
-GAME_TEST_ACCOUNT = 5561814
+TRADE_ACCOUNT = ACCOUNT_INFO.get('Account-Trade')
+GAME_ACCOUNT = ACCOUNT_INFO.get('Account-Game')
+GAME_DEV_ACCOUNT = ACCOUNT_INFO.get('Account-Game-Dev')
+GAME_STAGING_ACCOUNT = ACCOUNT_INFO.get('Account-Game-Staging')
 
 # Access tokens.
-GAME_TOKEN = "69683ec9c597687072f5793cbba7bfe4-e613b65d8adf1cabeec04cf6d65ab580"
-TRADE_TOKEN = ""
+GAME_TOKEN = ACCOUNT_INFO.get('Token-Game')
+TRADE_TOKEN = ACCOUNT_INFO.get('Token-Trade')
 
 #---------------------------------------
 # Data:
@@ -219,14 +224,5 @@ def get_logger(name):
     logger.addHandler(handler)
 
     return logger
-
-
-
-
-
-
-
-
-
 
 

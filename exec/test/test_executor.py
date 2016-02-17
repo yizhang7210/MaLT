@@ -25,7 +25,7 @@ class TestExecutor(unittest.TestCase):
     def test_open_close_trades(self):
         """ Test open and close of trades."""
         # Get an executor object.
-        executor = Executor(common.GAME_TEST_ACCOUNT)
+        executor = Executor(common.GAME_DEV_ACCOUNT)
 
         # Close all open trades first.
         executor.close_all_trades()
