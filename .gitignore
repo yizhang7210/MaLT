@@ -68,4 +68,5 @@ cron_setup
 # Account information file
 account.info
 
-
+# Logs
+logs/

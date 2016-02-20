@@ -14,23 +14,6 @@ from logging.handlers import TimedRotatingFileHandler
 #===============================================================================
 
 #---------------------------------------
-# Accounts:
-#---------------------------------------
-
-# Account Details:
-ACCOUNT_INFO = json.load(open('account.info', 'r'))
-
-# Account numbers:
-TRADE_ACCOUNT = ACCOUNT_INFO.get('Account-Trade')
-GAME_ACCOUNT = ACCOUNT_INFO.get('Account-Game')
-GAME_DEV_ACCOUNT = ACCOUNT_INFO.get('Account-Game-Dev')
-GAME_STAGING_ACCOUNT = ACCOUNT_INFO.get('Account-Game-Staging')
-
-# Access tokens.
-GAME_TOKEN = ACCOUNT_INFO.get('Token-Game')
-TRADE_TOKEN = ACCOUNT_INFO.get('Token-Trade')
-
-#---------------------------------------
 # Data:
 #---------------------------------------
 
@@ -52,6 +35,24 @@ DAILY_STRATEGY = "{0}/exec/daily_strategy".format(PROJECT_DIR)
 # Start day of historical data.
 START_DATE = '2005-01-01'
 DATE_LENGTH = len(START_DATE)
+
+#---------------------------------------
+# Accounts:
+#---------------------------------------
+
+# Account Details:
+ACCOUNT_INFO_FILE = "{0}/account.info".format(PROJECT_DIR)
+ACCOUNT_INFO = json.load(open(ACCOUNT_INFO_FILE, 'r'))
+
+# Account numbers:
+TRADE_ACCOUNT = ACCOUNT_INFO.get('Account-Trade')
+GAME_ACCOUNT = ACCOUNT_INFO.get('Account-Game')
+GAME_DEV_ACCOUNT = ACCOUNT_INFO.get('Account-Game-Dev')
+GAME_STAGING_ACCOUNT = ACCOUNT_INFO.get('Account-Game-Staging')
+
+# Access tokens.
+GAME_TOKEN = ACCOUNT_INFO.get('Token-Game')
+TRADE_TOKEN = ACCOUNT_INFO.get('Token-Trade')
 
 #---------------------------------------
 # Execution:
@@ -77,7 +78,7 @@ GAME_HEADER = {"Content-type": "application/x-www-form-urlencoded", \
 TRADE_HEADER = {}
 
 # File log location.
-LOG_FILE = "{0}/daily.log".format(PROJECT_DIR)
+LOG_FILE = "{0}/logs/daily.log".format(PROJECT_DIR)
 
 
 #===============================================================================
