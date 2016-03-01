@@ -72,11 +72,11 @@ class Executor():
         conn = http.client.HTTPSConnection(common.GAME_URL)
         conn.request("POST", url, body, common.GAME_HEADER)
         response = conn.getresponse()
-        response_content = response.read().decode()
+        response_content = json.loads(response.read().decode())
         conn.close()
 
         # Parse the JSON from the response and return the newly created trade id.
-        new_trade = json.loads(response_content)['tradeOpened']
+        new_trade = response_content['tradeOpened']
         trade_id = new_trade['id']
 
         # Log the trade.
@@ -101,13 +101,13 @@ class Executor():
         conn = http.client.HTTPSConnection(common.GAME_URL)
         conn.request("DELETE", url, "", common.GAME_HEADER)
         response = conn.getresponse()
-        response_content = response.read().decode()
+        response_content = json.loads(response.read().decode())
         conn.close()
 
         # Parse the JSON from the response and return the profit_loss.
-        try:
-            profit_loss = json.loads(response_content)['profit']
-        except KeyError:
+        if 'profit' in response_content:
+            profit_loss = response_content['profit']
+        else:
             logger.warn("Trying to close a non-existing trade %s.", trade_id)
             profit_loss = 0
 
@@ -136,10 +136,14 @@ class Executor():
         conn = http.client.HTTPSConnection(common.GAME_URL)
         conn.request("GET", url, "", common.GAME_HEADER)
         response = conn.getresponse()
-        response_content = response.read().decode()
+        response_content = json.loads(response.read().decode())
         conn.close()
 
-        trades = json.loads(response_content)['trades']
+        # Try return the trades:
+        if 'trades' in response_content:
+            trades = response_content['trades']
+        else:
+            trades = []
 
         return trades
 
