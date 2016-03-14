@@ -51,7 +51,7 @@ def main():
     if datetime.date.today().weekday() in [6, 0, 1, 2, 3]:
 
         # Log enter.
-        logger.info("Starting daily train.")
+        logger.info("Daily train: Starting.")
 
         # Fetch all and save new rates.
         rates.main()
@@ -61,7 +61,7 @@ def main():
             run(strategy_name)
 
         # Log exit.
-        logger.info("Daily train done.")
+        logger.info("Daily train: Done.")
 
     return
 

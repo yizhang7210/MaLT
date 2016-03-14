@@ -80,7 +80,7 @@ class Executor():
         trade_id = new_trade['id']
 
         # Log the trade.
-        logger.info("Opend new trade: %s.", new_trade)
+        logger.info("Opened new trade: %s.", str(new_trade))
 
         return trade_id
 
@@ -112,7 +112,7 @@ class Executor():
             profit_loss = 0
 
         # Log the closing of the trade.
-        logger.info("Closed trade %s.", trade_id)
+        logger.info("Closed trade %s. P/L: %.2f.", trade_id, profit_loss)
 
         return profit_loss
 
@@ -126,9 +126,6 @@ class Executor():
             Returns:
                 trades. list of dicts. Each entry includes the details of a trade.
         """
-        # Log.
-        logger.info("Fetching all open trades.")
-
         # Construct request url.
         url = ("/v1/accounts/{0}/trades".format(self.account_id))
 
@@ -157,9 +154,6 @@ class Executor():
             Returns:
                 void.
         """
-        # Log and close all.
-        logger.info("Closing all trades.")
-
         # Get all trades and close.
         trades = self.get_all_trades()
         for trade in trades:

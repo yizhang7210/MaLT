@@ -3,7 +3,6 @@
 """
 
 import common
-logger = common.get_logger(__name__)
 import csv
 from strategies.euler import util
 
@@ -74,9 +73,6 @@ def read_raw_file(input_file):
     # Last entry should be volume and should be large. The 200 is arbitrary.
     assert len(data[0]) == 10 and int(data[-1][9]) > 200
 
-    # Log.
-    logger.info("Read raw data from %s.", input_file)
-
     return data
 
 
@@ -132,18 +128,12 @@ def transform(input_file, output_file, pip_factor):
             row = transform_row(raw_data[i], raw_data[i + 1], pip_factor)
             writer.writerow(row)
 
-    # Log.
-    logger.info("Tranformed data to %s.", output_file)
-
     return
 
 
 def main():
     """ Main in transforming data for strategy Euler."""
     for instrument in common.ALL_PAIRS:
-        # Log enter.
-        logger.info("Euler: transformer.main() Starting.")
-
         # Gather necessary data.
         in_file = common.get_raw_data(instrument)
         out_file = util.get_clean_data(instrument)
@@ -151,9 +141,6 @@ def main():
 
         # Transform.
         transform(in_file, out_file, pip_factor)
-
-        # Log exit.
-        logger.info("Euler: transformation done.")
 
     return
 

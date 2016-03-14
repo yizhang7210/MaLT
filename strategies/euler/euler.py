@@ -149,15 +149,14 @@ class Euler(BaseStrategy):
         features = transformer.candle_to_features(candle, self.pip_factor)
         features = np.asarray(features).reshape(1, -1)
 
-        # Making the prediction.
+        # Making and logging the prediction.
         pred = self.model.predict(features)
+        logger.info("Euler: Predicted price change for %s is %.2f.", \
+                self.instrument, float(pred))
 
         # Parse the parameters.
         controls = self.parse_controls()
         units = self.parse_units(pred)
-
-        # Log.
-        logger.info("Executing strategy Euler.")
 
         # Make the decision.
         executor.make_trade(self.instrument, units, **controls)
@@ -298,9 +297,6 @@ class Euler(BaseStrategy):
             Returns:
                 void.
         """
-        # Log.
-        logger.info("Serializing the best model and params.")
-
         # Get the designated locations.
         model_loc, param_loc = common.get_strategy_loc(self.instrument)
 
