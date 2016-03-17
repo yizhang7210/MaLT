@@ -84,7 +84,7 @@ class Euler(BaseStrategy):
         if 'take_profit' in self.params:
             controls['take_profit'] = self.params['take_profit']
 
-        if 'take_profit' in self.params:
+        if 'trailing_stop' in self.params:
             controls['trailing_stop'] = self.params['trailing_stop']
 
         return controls
