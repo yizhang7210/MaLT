@@ -1,0 +1,2 @@
+59 16 * * * export PYTHONPATH=<path-to-your-MaLT-directory>; python3 $PYTHONPATH/malt/exec/daily_run.py
+10 17 * * * export PYTHONPATH=<path-to-your-MaLT-directory>; python3 $PYTHONPATH/malt/exec/daily_train.py

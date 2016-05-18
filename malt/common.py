@@ -1,12 +1,13 @@
 """ This module provides common resources shared among the project."""
 
-import os
+# External imports
 import datetime
 import json
 import logging
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import os
 from logging.handlers import TimedRotatingFileHandler
 
 #===============================================================================
@@ -28,7 +29,7 @@ CANDLE_FEATURES = ['time', 'openBid', 'highBid', 'lowBid', 'closeBid'] + \
                   ['openAsk', 'highAsk', 'lowAsk', 'closeAsk', 'volume']
 
 # Project Directories.
-PROJECT_DIR = os.environ['PYTHONPATH']
+PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
 DAILY_CANDLES = "{0}/data/store/candles/daily".format(PROJECT_DIR)
 DAILY_STRATEGY = "{0}/exec/daily_strategy".format(PROJECT_DIR)
 
@@ -41,7 +42,7 @@ DATE_LENGTH = len(START_DATE)
 #---------------------------------------
 
 # Account Details:
-ACCOUNT_INFO_FILE = "{0}/account.info".format(PROJECT_DIR)
+ACCOUNT_INFO_FILE = "{0}/../account.info".format(PROJECT_DIR)
 ACCOUNT_INFO = json.load(open(ACCOUNT_INFO_FILE, 'r'))
 
 # Account numbers:
@@ -78,7 +79,7 @@ GAME_HEADER = {"Content-type": "application/x-www-form-urlencoded", \
 TRADE_HEADER = {}
 
 # File log location.
-LOG_FILE = "{0}/logs/daily.log".format(PROJECT_DIR)
+LOG_FILE = "{0}/../logs/daily.log".format(PROJECT_DIR)
 
 
 #===============================================================================
@@ -111,10 +112,11 @@ def get_strategy_module(strategy_name):
             module: module variable, where the strategy class is defined.
     """
     module_name = strategy_name.lower()
-    package = __import__('strategies' + ('.' + module_name) * 2)
-    module = getattr(getattr(package, module_name), module_name)
+    malt = __import__('malt.strategies' + ('.' + module_name) * 2)
+    strategies = getattr(malt, 'strategies')
+    strategy_module = getattr(getattr(strategies, module_name), module_name)
 
-    return module
+    return strategy_module
 
 
 def price_to_pip(price, pip_factor):

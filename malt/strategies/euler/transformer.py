@@ -2,9 +2,12 @@
     feature format for strategy Euler.
 """
 
-import common
+# External imports
 import csv
-from strategies.euler import util
+
+# Internal imports
+from malt import common
+from malt.strategies.euler import util
 
 #===============================================================================
 #   Functions:

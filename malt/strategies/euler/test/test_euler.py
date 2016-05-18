@@ -1,11 +1,14 @@
 """ This is the test module for euler.py."""
 
-import common
+# External imports
 import unittest
 from sklearn import tree
-from strategies import base
-from strategies.euler import euler, transformer
-from strategies.euler.learner import Learner
+
+# Internal imports
+from malt import common
+from malt.strategies import base
+from malt.strategies.euler import euler, transformer
+from malt.strategies.euler.learner import Learner
 
 #===============================================================================
 # Classes:

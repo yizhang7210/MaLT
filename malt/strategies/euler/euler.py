@@ -1,14 +1,17 @@
 """ This module is responsible for defining the strategy class Euler."""
 
-import common
-logger = common.get_logger(__name__)
+# External imports
 import json
 import math
 import numpy as np
 from sklearn.externals import joblib
-from strategies.base import BaseStrategy
-from strategies.euler import transformer, util
-from strategies.euler.learner import Learner
+
+# Internal imports
+from malt import common
+logger = common.get_logger(__name__)
+from malt.strategies.base import BaseStrategy
+from malt.strategies.euler import transformer, util
+from malt.strategies.euler.learner import Learner
 
 #===============================================================================
 #   Classes:

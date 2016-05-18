@@ -1,10 +1,13 @@
 """ This is the test module for transformer.py."""
 
-import common
+# External imports
 import csv
 import os
 import unittest
-from strategies.euler import transformer
+
+# Internal imports
+from malt import common
+from malt.strategies.euler import transformer
 
 #===============================================================================
 # Classes:

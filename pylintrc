@@ -1,0 +1,9 @@
+[TYPECHECK]
+
+ignored-modules = numpy
+
+[BASIC]
+good-names = logger, i, _
+
+[SIMILARITIES]
+min-similarity-lines = 10

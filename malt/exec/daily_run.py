@@ -2,14 +2,17 @@
     to run everyday at just before 17:00 America/New York time.
 """
 
-import common
-logger = common.get_logger(__name__)
+# External imports
 import datetime
 import json
 import time
-from data import rates
-from exec.executor import Executor
 from sklearn.externals import joblib
+
+# Internal imports
+from malt import common
+logger = common.get_logger(__name__)
+from malt.data import rates
+from malt.exec.executor import Executor
 
 #===============================================================================
 #   Functions:

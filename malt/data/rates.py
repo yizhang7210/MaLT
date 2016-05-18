@@ -2,12 +2,15 @@
     a data source, parse them and save them to file.
 """
 
-import common
-logger = common.get_logger(__name__)
+# External imports
 import csv
 import datetime
 import http.client
 import json
+
+# Internal imports
+from malt import common
+logger = common.get_logger(__name__)
 
 #===============================================================================
 #   Functions:

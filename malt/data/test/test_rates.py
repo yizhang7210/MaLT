@@ -1,9 +1,12 @@
 """ This is the test module for rates.py."""
 
+# External imports
 import csv
 import os
 import unittest
-from data import rates
+
+# Internal imports
+from malt.data import rates
 
 #===============================================================================
 #   Classes:

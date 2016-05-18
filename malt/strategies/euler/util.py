@@ -3,8 +3,11 @@
     strategy and model level parameter building.
 """
 
-import common
+# External imports
 from sklearn import tree
+
+# Internal imports
+from malt import common
 
 #===============================================================================
 #   Constants:

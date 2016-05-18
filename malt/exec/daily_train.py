@@ -3,10 +3,13 @@
     at 18:00 on Sunday - Thursday.
 """
 
-import common
-logger = common.get_logger(__name__)
+# External imports
 import datetime
-from data import rates
+
+# Internal imports
+from malt import common
+logger = common.get_logger(__name__)
+from malt.data import rates
 
 #===============================================================================
 #   Functions:
@@ -25,8 +28,9 @@ def run(strategy_name):
     module_name = strategy_name.lower()
 
     # The transformer.
-    transformer = __import__('strategies.' + module_name + '.transformer')
-    transformer = getattr(getattr(transformer, module_name), 'transformer')
+    malt = __import__('malt.strategies.' + module_name + '.transformer')
+    strategies = getattr(malt, 'strategies')
+    transformer = getattr(getattr(strategies, module_name), 'transformer')
 
     # The strategy module.
     strategy_module = common.get_strategy_module(strategy_name)

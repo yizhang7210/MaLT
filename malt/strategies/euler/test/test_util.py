@@ -1,9 +1,12 @@
 """ This is the test module for util.py."""
 
+# External imports
 import numpy as np
 import unittest
 from sklearn import tree
-from strategies.euler import util
+
+# Internal imports
+from malt.strategies.euler import util
 
 #===============================================================================
 # Classes:

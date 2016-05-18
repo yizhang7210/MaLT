@@ -2,8 +2,11 @@
     providing shared utilities across the strategy package.
 """
 
-import common
+# External imports
 import numpy as np
+
+# Internal imports
+from malt import common
 
 #===============================================================================
 #   Classes:

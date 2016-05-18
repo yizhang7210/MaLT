@@ -1,9 +1,12 @@
 """ This module defines the Executor class for actually executing trades."""
 
-import common
-logger = common.get_logger(__name__)
+# External imports
 import http.client
 import json
+
+# Internal imports
+from malt import common
+logger = common.get_logger(__name__)
 
 #===============================================================================
 #   Classes:
