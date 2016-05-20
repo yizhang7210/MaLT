@@ -1,4 +1,6 @@
-""" This is the test module for learner.py."""
+""" This is the malt.strategies.euler.test.test_leaner module.
+    This module is responsible for testing malt.strategies.euler.learner.
+"""
 
 # External imports
 import unittest

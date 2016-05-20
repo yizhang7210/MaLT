@@ -1,4 +1,5 @@
-""" This module is responsible for providing shared constants, functions and
+""" This is the malt.strategies.euler.util module.
+    This module is responsible for providing shared constants, functions and
     utilities for strategy Euler, including data formatting, calculation, and
     strategy and model level parameter building.
 """

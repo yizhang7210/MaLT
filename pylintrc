@@ -7,3 +7,5 @@ good-names = logger, i, _
 
 [SIMILARITIES]
 min-similarity-lines = 10
+
+

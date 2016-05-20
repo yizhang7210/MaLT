@@ -1,4 +1,6 @@
-""" This is the test module for rates.py."""
+""" This is the malt.data.test.test_rates module.
+    This module is responsible for testing malt.data.rates.
+"""
 
 # External imports
 import csv

@@ -1,4 +1,6 @@
-""" This is the test module for euler.py."""
+""" This is the malt.strategies.euler.test.test_euler module.
+    This module is responsible for testing malt.strategies.euler.euler.
+"""
 
 # External imports
 import unittest

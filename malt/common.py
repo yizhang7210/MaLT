@@ -1,4 +1,6 @@
-""" This module provides common resources shared among the project."""
+""" This is the malt.common module.
+    This module provides common resources shared among the whole project.
+"""
 
 # External imports
 import datetime

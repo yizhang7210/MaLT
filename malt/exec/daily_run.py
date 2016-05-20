@@ -1,4 +1,5 @@
-""" This module is responsible for making daily trades. It should be scheduled
+""" This is the malt.exec.daily_run module.
+    This module is responsible for making daily trades. It should be scheduled
     to run everyday at just before 17:00 America/New York time.
 """
 

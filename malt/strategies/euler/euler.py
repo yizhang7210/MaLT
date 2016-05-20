@@ -1,4 +1,6 @@
-""" This module is responsible for defining the strategy class Euler."""
+""" This is the malt.strategies.euler.euler module.
+    This module is responsible for defining the strategy class Euler.
+"""
 
 # External imports
 import json

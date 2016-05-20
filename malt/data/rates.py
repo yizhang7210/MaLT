@@ -1,4 +1,5 @@
-""" This module is primarily responsible for retriving historical rates from
+""" This is the malt.data.rates module.
+    This module is primarily responsible for retriving historical rates from
     a data source, parse them and save them to file.
 """
 

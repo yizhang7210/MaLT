@@ -1,4 +1,5 @@
-""" This module is responsible for transforming raw data to the appropriate
+""" This is the malt.strategies.euler.transformer module.
+    This module is responsible for transforming raw data to the appropriate
     feature format for strategy Euler.
 """
 

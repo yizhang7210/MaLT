@@ -1,4 +1,6 @@
-""" This module defines the Executor class for actually executing trades."""
+""" This is the malt.exec.executor module.
+    This module defines the Executor class for actually executing trades.
+"""
 
 # External imports
 import http.client

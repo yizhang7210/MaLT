@@ -1,4 +1,5 @@
-""" This module is responsible for defining the base strategy class as well as
+""" This is the malt.strategies.base module.
+    This module is responsible for defining the base strategy class as well as
     providing shared utilities across the strategy package.
 """
 

@@ -1,4 +1,6 @@
-""" This is the test module for executor.py."""
+""" This is the malt.exec.test.test_executor module.
+    This module is responsible for testing malt.exec.executor.
+"""
 
 # External imports
 import time

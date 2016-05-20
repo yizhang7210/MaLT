@@ -1,4 +1,6 @@
-""" This is the test module for transformer.py."""
+""" This is the malt.strategies.euler.test.test_transformer module.
+    This module is responsible for testing malt.strategies.euler.transformer.
+"""
 
 # External imports
 import csv

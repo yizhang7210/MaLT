@@ -1,4 +1,6 @@
-""" This is the test module for util.py."""
+""" This is the malt.strategies.euler.test.test_util module.
+    This module is responsible for testing malt.strategies.euler.util.
+"""
 
 # External imports
 import numpy as np

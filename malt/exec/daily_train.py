@@ -1,6 +1,7 @@
-""" This module is responsible for updating data, retraining models as well as
+""" This is the malt.exec.daily_train module.
+    This module is responsible for updating data, re-training models as well as
     selecting the best strategy during the day. It should be scheduled to run
-    at 18:00 on Sunday - Thursday.
+    everyday at any time after 17:00. Currently it runs at 17:10.
 """
 
 # External imports

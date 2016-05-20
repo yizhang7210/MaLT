@@ -1,4 +1,6 @@
-""" This module is responsible for the learning of historical data"""
+""" This is the malt.strategies.euler.learner module.
+    This module is responsible for the learning of historical data.
+"""
 # TODO: Classification. logistic regression. Neural Network.
 # TODO: Formulate as outliner detection.
 
