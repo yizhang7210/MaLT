@@ -1,4 +1,4 @@
-# Install software dependencies (primarily sklearn and pylint)
+# Install software dependencies
 sudo apt-get install python3
 sudo apt-get install python3-pip
 sudo apt-get install python3-numpy
@@ -9,7 +9,7 @@ sudo apt-get install python3-tk
 
 sudo pip3 install -U scikit-learn
 sudo pip3 install -U pylint
-
+sudo pip3 install -U nose
 
 # Add useful folders and files
 # logs

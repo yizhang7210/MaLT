@@ -1,6 +1,21 @@
 # MaLT
 Maths and Luck Trading
 
+### What is MaLT?
+
+MaLT (Maths and Luck Trading) is an automated algorithmic foreign exchange (forex)
+trading application. When correctly set up, it is supposed to be automatically
+running in the background and making trades (i.e. buying and selling currencies)
+for profit, according to specific trading strategies, provided your machine is
+connected to the internet.
+
+- For setting up MaLT,
+see [User Setup Guide](docs/user-docs/user_setup.md).
+- For details about MaLT's trading strategies,
+see [Strategy Guide](docs/user-docs/strategies.md).
+- For more information about MaLT as a software application,
+see documentation under `docs/dev-docs`.
+
 Time line
 ---------
 
