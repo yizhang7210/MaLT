@@ -1,6 +1,7 @@
 """ This is the malt.strategies.euler.test.test_euler module.
     This module is responsible for testing malt.strategies.euler.euler.
 """
+# TODO: More thorough tests on parsing the units etc.
 
 # External imports
 import unittest
@@ -50,7 +51,7 @@ class TestEuler(unittest.TestCase):
 
         # Initialize Euler and force load test data.
         strategy = euler.Euler("GBP_USD")
-        strategy.set_params(unit_shape='linear', threshold=85)
+        strategy.set_params(unit_shape=common.UNIT_LINEAR, threshold=85)
         strategy.test_data = transformer.read_raw_file(self.tmp_raw_file)
         balance = strategy.dry_run(pred)
 

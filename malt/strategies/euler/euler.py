@@ -57,8 +57,9 @@ class Euler(BaseStrategy):
                     threshold: positive float. Threshold for the strategy to
                         take action (either buy or sell).
                     unit_shape: string. Describes the relationship between the
-                        number of units and predicted value. One of 'constant',
-                        'linear', 'quadratic', or 'root'
+                        number of units and the predicted value. One of:
+                        UNIT_CONSTANT, UNIT_LINEAR, UNIT_SQUARE, or UNIT_LOG
+                        as defined in the module common.
 
             Returns:
                 void.
@@ -118,23 +119,26 @@ class Euler(BaseStrategy):
             return 0
 
         # Parse different ways of determining units.
-        if unit_shape == 'constant':
-            # Constant number of units.
+        if unit_shape == common.UNIT_CONSTANT:
             units = common.CONSTANT_FACTOR
-        elif unit_shape == 'linear':
-            # Units linear in predicted change.
-            units = abs(int(pred))
-        elif unit_shape == 'quadratic':
-            # Units quadratic in predicted change.
+
+        elif unit_shape == common.UNIT_LINEAR:
+            units = int(abs(pred * common.LINEAR_FACTOR))
+
+        elif unit_shape == common.UNIT_SQUARE:
             units = int(pred ** 2 * common.SQUARE_FACTOR)
-        elif unit_shape == 'root':
-            # Units proportional to square root of predicted change.
-            units = int(math.sqrt(abs(pred)) * common.ROOT_FACTOR)
+
+        elif unit_shape == common.UNIT_LOG:
+            units = int(math.log(abs(pred)) * common.LOG_FACTOR)
+
         else:
-            logger.warn("euler.parse_units(): invalid unit shape.")
+            logger.warn("euler.parse_units(): Unit shape has to be one of \
+                    UNIT_CONSTANT, UNIT_LINEAR, UNIT_SQUARE, or UNIT_LOG \
+                    as defined in 'common'.")
             return 0
 
-        units = units * sign
+        # Make sure the absoulte value of units doesn't exceed the maximum.
+        units = min(units, common.MAX_UNITS) * sign
 
         return units
 

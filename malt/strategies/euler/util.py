@@ -66,15 +66,17 @@ def get_euler_params():
                 threshold: positive float. If predicted price change is more
                     than the threshold, the strategy takes action (buy/sell).
                 unit_shape: string. Describes the relationship between the
-                    number of units and predicted value. One of 'constant',
-                    'linear', 'quadratic', or 'root'
+                    number of units and the predicted value. One of:
+                    UNIT_CONSTANT, UNIT_LINEAR, UNIT_SQUARE, or UNIT_LOG
+                    as defined in the module common.
                 stop_loss: float. Price for stop loss order.
                 take_profit: float. Price for take profit order.
                 trailing_stop: float. Pips for trailing stop order.
     """
     params = [{'threshold': x, 'unit_shape': shape, 'trailing_stop': 15} \
              for x in [40., 60., 80., 100.]\
-             for shape in ['constant', 'linear', 'quadratic', 'root']]
+             for shape in [common.UNIT_CONSTANT, common.UNIT_LINEAR, \
+                common.UNIT_SQUARE, common.UNIT_LOG]]
 
     return params
 

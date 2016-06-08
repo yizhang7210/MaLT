@@ -8,6 +8,7 @@ import unittest
 from sklearn import tree
 
 # Internal imports
+from malt import common
 from malt.strategies.euler import util
 
 #===============================================================================
@@ -39,7 +40,7 @@ class TestUtil(unittest.TestCase):
         # Now params for strategy Euler.
         strategy_params = util.get_euler_params()
         self.assertEqual(len(strategy_params), 16)
-        self.assertEqual(strategy_params[3]['unit_shape'], 'root')
+        self.assertEqual(strategy_params[3]['unit_shape'], common.UNIT_LOG)
         self.assertEqual(strategy_params[-2]['threshold'], 100.0)
 
         return

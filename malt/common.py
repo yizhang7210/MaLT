@@ -23,7 +23,7 @@ from logging.handlers import TimedRotatingFileHandler
 # Currency pairs.
 ALL_PAIRS = ['EUR_USD', 'USD_JPY', 'GBP_USD', 'USD_CHF', 'USD_CAD']
 
-# Strategies:
+# Strategies.
 ALL_STRATEGIES = ['Euler']
 
 # Daily candles field names.
@@ -43,11 +43,11 @@ DATE_LENGTH = len(START_DATE)
 # Accounts:
 #---------------------------------------
 
-# Account Details:
+# Account Details.
 ACCOUNT_INFO_FILE = "{0}/../account.info".format(PROJECT_DIR)
 ACCOUNT_INFO = json.load(open(ACCOUNT_INFO_FILE, 'r'))
 
-# Account numbers:
+# Account numbers.
 TRADE_ACCOUNT = ACCOUNT_INFO.get('Account-Trade')
 GAME_ACCOUNT = ACCOUNT_INFO.get('Account-Game')
 GAME_DEV_ACCOUNT = ACCOUNT_INFO.get('Account-Game-Dev')
@@ -66,9 +66,19 @@ BUY = 'buy'
 SELL = 'sell'
 
 # Units.
+# Unit shapes.
+UNIT_CONSTANT = 'CONSTANT'
+UNIT_LINEAR = 'LINEAR'
+UNIT_SQUARE = 'SQUARE'
+UNIT_LOG = 'LOGARITHM'
+
+# Unit multiplicative factors.
+# The number of units should be equal when the predicted price change is 200.
 CONSTANT_FACTOR = 200
-SQUARE_FACTOR = 0.2
-ROOT_FACTOR = 8
+LINEAR_FACTOR = 1
+SQUARE_FACTOR = 0.05   # 1/200
+LOG_FACTOR = 37.75     # 200/log(200)
+MAX_UNITS = 500
 
 # REST end-points.
 GAME_URL = "api-fxpractice.oanda.com"
